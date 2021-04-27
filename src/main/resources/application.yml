@@ -1,0 +1,47 @@
+server:
+  port: 9090
+  tomcat:
+    max-swallow-size: -1
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    #        url: jdbc:postgresql://ec2-52-44-46-66.compute-1.amazonaws.com:5432/db8u3jocci3fh1?currentSchema=appointment_service_schema
+    #        username: fgxexwgewolqyk
+    #        password: 486a7c224441ead5ac7de74c120354dcb0a88a05c4a43a4dec3dd7b00281b075
+    url: ${DATASOURCE_URL}?currentSchema=test_service_schema
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    #url: jdbc:postgresql://localhost:5432/postgres?currentSchema=appointment_service_schema
+    #username: postgres
+    #password: root
+    initialization-mode: always
+  #    hikari:
+  #      connection-timeout: 20000
+  #      minimum-idle: 10
+  #      maximum-pool-size: 10
+  #      idle-timeout: 10000
+  #      max-lifetime: 1000
+  #      auto-commit: true
+  jpa:
+    #open-in-view: disable
+    properties:
+      hibernate:
+        default_schema: test_service_schema
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/changelog-master.xml
+    default-schema: test_service_schema
+
+judge0:
+  service:
+    base:
+      url: https://judge0-ce.p.rapidapi.com
