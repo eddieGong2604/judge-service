@@ -42,9 +42,10 @@ spring:
     default-schema: test_service_schema
   redis:
     database: 1
-    host: ec2-34-227-188-167.compute-1.amazonaws.com
-    port: 28450
-    password: p8769bf82649f5bd9a496345fbfa37a71fa7cf16a936ca97181db45b1cc66d3cb
+    host: scat.redistogo.com
+    port: 10173
+    password: e5fddfc4c687940ad80c56cb4bc493f5
+    username: redistogo
     pool:
       max-active: 8
       max-wait: -1
