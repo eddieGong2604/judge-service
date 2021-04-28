@@ -4,10 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubmissionVerdictResponseDto {
-    private String sdtout;
-    private StatusResponseDto status;
+public class SubmissionBatchTokenResponseDto {
+    private List<SubmissionTokenResponseDto> submissions;
 }

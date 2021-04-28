@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubmissionVerdictResponseDto {
-    private String sdtout;
-    private StatusResponseDto status;
+public class SubmissionResponseDto {
+    private String stdout;
+    private String stdin;
 }

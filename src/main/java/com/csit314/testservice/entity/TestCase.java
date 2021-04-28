@@ -16,7 +16,6 @@ public class TestCase extends BaseEntity {
     private Verdict verdict;
     private String input;
     private String expectedOutput;
-
     @ManyToOne
     @JoinColumn(name = "attempt_id")
     @JsonIgnore

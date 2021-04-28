@@ -40,7 +40,17 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/changelog-master.xml
     default-schema: test_service_schema
-
+  redis:
+    database: 0
+    host: ${REDIS_URL}
+    port: 6379
+    password:
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+    timeout: 0
 judge0:
   service:
     base:

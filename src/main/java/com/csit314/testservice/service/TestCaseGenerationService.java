@@ -1,5 +1,9 @@
 package com.csit314.testservice.service;
 
-public interface TestCaseGenerationService {
+import com.csit314.testservice.controller.response.TestCaseResponseDto;
 
+import java.util.List;
+
+public interface TestCaseGenerationService {
+    List<TestCaseResponseDto> generateTestCase() throws InterruptedException;
 }
