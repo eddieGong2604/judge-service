@@ -41,10 +41,10 @@ spring:
     change-log: classpath:/db/changelog/changelog-master.xml
     default-schema: test_service_schema
   redis:
-    database: 0
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
-    password: ${REDIS_PASSWORD}
+    database: 1
+    host: ec2-34-227-188-167.compute-1.amazonaws.com
+    port: 28450
+    password: p8769bf82649f5bd9a496345fbfa37a71fa7cf16a936ca97181db45b1cc66d3cb
     pool:
       max-active: 8
       max-wait: -1
