@@ -2,7 +2,6 @@ package com.csit314.testservice.config.cache;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -30,12 +29,9 @@ public class RedisConfig {
     }
     @Bean
     public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig) throws  URISyntaxException {
-        String envRedisUrl = System.getenv("REDIS_URL");
-        URI redisUri = new URI(envRedisUrl);
         RedisStandaloneConfiguration hostConfig = new RedisStandaloneConfiguration();
-        hostConfig.setPort(redisUri.getPort());
-        hostConfig.setHostName(redisUri.getHost());
-        hostConfig.setPassword(redisUri.getUserInfo().split(":", 2)[1]);
+        hostConfig.setPort(6379);
+        hostConfig.setHostName("10.126.183.219");
         JedisClientConfiguration.JedisClientConfigurationBuilder builder = JedisClientConfiguration.builder();
         JedisClientConfiguration clientConfig = builder
                 .usePooling()

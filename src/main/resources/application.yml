@@ -42,10 +42,9 @@ spring:
     default-schema: test_service_schema
   redis:
     database: 1
-    host: scat.redistogo.com
-    port: 10173
-    password: e5fddfc4c687940ad80c56cb4bc493f5
-    username: redistogo
+    host: 10.126.183.219
+    port: 6379
+    password:
     pool:
       max-active: 8
       max-wait: -1
