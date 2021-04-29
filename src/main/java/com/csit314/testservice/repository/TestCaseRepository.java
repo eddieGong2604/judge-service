@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface TestCaseRepository extends JpaRepository<TestCase, UUID>, JpaSpecificationExecutor<TestCase> {
 
     Optional<List<TestCase>> findByAttemptId(UUID attemptId);
+    Optional<TestCase> findByAttemptIdAndId(UUID attemptId, UUID id);
+
 }

@@ -29,15 +29,17 @@ public class RedisConfig {
     }
     @Bean
     public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig) throws  URISyntaxException {
+        String envRedisUrl = System.getenv("REDIS_URL");
+        URI redisUri = new URI(envRedisUrl);
         RedisStandaloneConfiguration hostConfig = new RedisStandaloneConfiguration();
-        hostConfig.setPort(6379);
-        hostConfig.setHostName("10.126.183.219");
+        hostConfig.setPort(redisUri.getPort());
+        hostConfig.setHostName(redisUri.getHost());
+        hostConfig.setPassword(redisUri.getUserInfo().split(":", 2)[1]);
         JedisClientConfiguration.JedisClientConfigurationBuilder builder = JedisClientConfiguration.builder();
         JedisClientConfiguration clientConfig = builder
                 .usePooling()
                 .poolConfig(jedisPoolConfig)
                 .build();
-
         return new JedisConnectionFactory(hostConfig, clientConfig);
 
     }

@@ -16,6 +16,7 @@ public class AttemptMapperImpl implements AttemptMapper{
     @Override
     public AttemptResponseDto toDto(Attempt attempt) {
         AttemptResponseDto attemptResponseDto = new AttemptResponseDto();
+        attemptResponseDto.setAttemptId(attempt.getId());
         attemptResponseDto.setCode(attempt.getCode());
         attemptResponseDto.setTestCases(testCaseMapper.toDtos(attempt.getTestCases()));
         return attemptResponseDto;

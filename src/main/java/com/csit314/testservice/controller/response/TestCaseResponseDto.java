@@ -13,9 +13,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestCaseResponseDto {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private UUID testCaseId;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Verdict verdict;
     private String input;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String stdout;
     private String expectedOutput;
 }

@@ -1,6 +1,7 @@
 package com.csit314.testservice.controller;
 
 import com.csit314.testservice.controller.request.SourceCodeRequestDto;
+import com.csit314.testservice.controller.response.AttemptResponseDto;
 import com.csit314.testservice.controller.response.TestCaseResponseDto;
 import com.csit314.testservice.service.JudgeService;
 import com.csit314.testservice.service.TestCaseGenerationService;
@@ -17,18 +18,39 @@ public class TestController {
 
     private final JudgeService judgeService;
     private final TestCaseGenerationService testCaseGenerationService;
+
     @Autowired
     public TestController(JudgeService judgeService, TestCaseGenerationService testCaseGenerationService) {
         this.judgeService = judgeService;
         this.testCaseGenerationService = testCaseGenerationService;
     }
 
-    @GetMapping(value = "/testcases")
+    @GetMapping(value = "/testCases")
     public ResponseEntity<?> getTestCases() throws InterruptedException {
         List<TestCaseResponseDto> testCaseResponseDtos = testCaseGenerationService.generateTestCase();
         return new ResponseEntity<>(testCaseResponseDtos, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/attempts")
+    public ResponseEntity<?> createAttempt(@RequestBody SourceCodeRequestDto dto) throws InterruptedException {
+        AttemptResponseDto attempt = judgeService.createAttempt(dto);
+        return new ResponseEntity<>(attempt, HttpStatus.OK);
+    }
 
+    @PutMapping(value = "/attempts/{attemptId}/{testCaseId}")
+    public ResponseEntity<?> executeTestCase(@PathVariable("attemptId") UUID attemptId,@PathVariable("testCaseId") UUID testCaseId) throws InterruptedException {
+        TestCaseResponseDto testCase = judgeService.executeTestCase(attemptId,testCaseId);
+        return new ResponseEntity<>(testCase, HttpStatus.OK);
+    }
+    @GetMapping(value = "/attempts/{attemptId}")
+    public ResponseEntity<?> getAttemptById(@PathVariable("attemptId") UUID attemptId) throws InterruptedException {
+        AttemptResponseDto attemptResponseDto = judgeService.getAttemptById(attemptId);
+        return new ResponseEntity<>(attemptResponseDto, HttpStatus.OK);
+    }
+    @GetMapping(value = "/attempts/{attemptId}/{testCaseId}")
+    public ResponseEntity<?> getTestCase(@PathVariable("attemptId") UUID attemptId,@PathVariable("testCaseId") UUID testCaseId) throws InterruptedException {
+        TestCaseResponseDto testCase = judgeService.getTestCase(attemptId,testCaseId);
+        return new ResponseEntity<>(testCase, HttpStatus.OK);
+    }
 
 }

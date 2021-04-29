@@ -10,7 +10,7 @@ import com.csit314.testservice.integration.judge0.dto.response.SubmissionBatchRe
 import java.util.List;
 
 public interface TestCaseMapper {
-    TestCaseResponseDto toDto(TestCase attempt);
+    TestCaseResponseDto toDto(TestCase testCase);
 
     List<TestCaseResponseDto> toDtos(List<TestCase> testCaseList);
 

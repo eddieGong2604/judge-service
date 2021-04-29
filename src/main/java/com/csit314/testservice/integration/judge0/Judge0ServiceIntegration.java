@@ -1,10 +1,8 @@
 package com.csit314.testservice.integration.judge0;
 
 import com.csit314.testservice.integration.judge0.dto.request.SubmissionBatchRequestDto;
-import com.csit314.testservice.integration.judge0.dto.response.SubmissionBatchResponseDto;
-import com.csit314.testservice.integration.judge0.dto.response.SubmissionBatchTokenResponseDto;
-import com.csit314.testservice.integration.judge0.dto.response.SubmissionResponseDto;
-import com.csit314.testservice.integration.judge0.dto.response.SubmissionTokenResponseDto;
+import com.csit314.testservice.integration.judge0.dto.request.SubmissionRequestDto;
+import com.csit314.testservice.integration.judge0.dto.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -30,6 +28,43 @@ public class Judge0ServiceIntegration {
     @PostConstruct
     private void configBaseUrl() {
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(judge0baseUrl));
+    }
+
+
+    public SubmissionVerdictResponseDto executeTestCase(String code, String input, String expectedOutput) throws InterruptedException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-RapidAPI-Key", "471015e19cmsh7fe384858bf8c86p1d65e2jsn8c49a074a372");
+        ResponseEntity<SubmissionTokenResponseDto> tokenResponseDto = restTemplate
+                .postForEntity(judge0baseUrl + "/submissions?base64_encoded=false", new HttpEntity<>(SubmissionRequestDto.builder().source_code(code).language_id(52).stdin(input).expected_output(expectedOutput).build(), headers),
+                        SubmissionTokenResponseDto.class);
+        if (tokenResponseDto.getStatusCode().is2xxSuccessful()) {
+            String token = Objects.requireNonNull(tokenResponseDto.getBody()).getToken();
+
+            /*Get the token for this submission*/
+            ResponseEntity<SubmissionVerdictResponseDto> submissionVerdict = restTemplate
+                    .exchange(judge0baseUrl + "/submissions/" + token+ "?base64_encoded=false&fields=stdout,stdin,status", HttpMethod.GET,
+                            new HttpEntity<>(null, headers), SubmissionVerdictResponseDto.class);
+
+            if(submissionVerdict.getStatusCode().is2xxSuccessful()){
+                /*If the code is in queue or in processing, send the request again*/
+                while (submissionVerdict.getBody().getStatus().getId() == 1 || submissionVerdict.getBody().getStatus().getId() == 2){
+                    Thread.sleep(1000);
+                    submissionVerdict = restTemplate
+                            .exchange(judge0baseUrl + "/submissions/" + token+ "?base64_encoded=false&fields=stdout,stdin,status", HttpMethod.GET,
+                                    new HttpEntity<>(null, headers), SubmissionVerdictResponseDto.class);
+                }
+                return submissionVerdict.getBody();
+            }
+            else{
+                throw new RuntimeException("Error");
+
+            }
+
+        }
+        else{
+            throw new RuntimeException("Error");
+        }
+
     }
 
     public SubmissionBatchResponseDto getExpectedOutputBatch(SubmissionBatchRequestDto submissionBatchRequestDto) throws InterruptedException {

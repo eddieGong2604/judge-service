@@ -25,8 +25,6 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class TestCaseGenerationServiceImpl implements TestCaseGenerationService {
     private final TestCaseMapperImpl testCaseMapper;
-    private final TestCaseRepository testCaseRepository;
-    private final AttemptRepository attemptRepository;
     private final RedisTemplate<String, CachedAssignment> assignmentCache;
     private final Judge0ServiceIntegration judge0ServiceIntegration;
     private final String ASSIGNMENT_CACHE_KEY = "CSCI203_ASSIGNMENT3";

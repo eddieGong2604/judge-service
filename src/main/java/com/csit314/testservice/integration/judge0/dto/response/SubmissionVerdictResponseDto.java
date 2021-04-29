@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubmissionVerdictResponseDto {
-    private String sdtout;
+    private String stdin;
+    private String stdout;
     private StatusResponseDto status;
 }
