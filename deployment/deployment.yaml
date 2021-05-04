@@ -16,7 +16,7 @@ spec:
           ports:
             - containerPort: 9090
           imagePullPolicy: IfNotPresent
-          image: asia.gcr.io/aqueous-tube-251208/test-serivce:0.1.0
+          image: asia.gcr.io/aqueous-tube-251208/test-service:0.1.0
           envFrom:
             - secretRef:
                 name: data-source
