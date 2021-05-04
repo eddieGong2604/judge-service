@@ -17,9 +17,9 @@ spring:
     #        url: jdbc:postgresql://ec2-52-44-46-66.compute-1.amazonaws.com:5432/db8u3jocci3fh1?currentSchema=appointment_service_schema
     #        username: fgxexwgewolqyk
     #        password: 486a7c224441ead5ac7de74c120354dcb0a88a05c4a43a4dec3dd7b00281b075
-    url: jdbc:postgresql://ec2-3-233-7-12.compute-1.amazonaws.com:5432/dak7er5509euaf?currentSchema=test_service_schema
-    username: plhogchggrjlqz
-    password: f0bc26ffab8494faeb5eb24e5f53063769fd6b1d0bb563c19e09884b657f4421
+    url: jdbc:postgresql://127.0.0.1:5432/postgres?currentSchema=test_service_schema
+    username: postgres
+    password: root
     #url: jdbc:postgresql://localhost:5432/postgres?currentSchema=appointment_service_schema
     #username: postgres
     #password: root
