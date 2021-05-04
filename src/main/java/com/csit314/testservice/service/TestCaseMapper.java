@@ -17,4 +17,8 @@ public interface TestCaseMapper {
     List<TestCaseResponseDto> fromCachedToResponseTestCase(List<CachedTestCase> cachedTestCases);
 
     List<CachedTestCase> fromSubmissionBatchResponseToCachedTestCase(SubmissionBatchResponseDto submissionBatchResponseDto);
+
+    List<TestCaseResponseDto> fromSubmissionBatchResponseToTestcaseResponseDto(SubmissionBatchResponseDto submissionBatchResponseDto);
+
+
 }

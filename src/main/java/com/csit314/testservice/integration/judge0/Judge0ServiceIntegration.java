@@ -1,5 +1,6 @@
 package com.csit314.testservice.integration.judge0;
 
+import com.csit314.testservice.config.advice.TrackExecutionTime;
 import com.csit314.testservice.integration.judge0.dto.request.SubmissionBatchRequestDto;
 import com.csit314.testservice.integration.judge0.dto.request.SubmissionRequestDto;
 import com.csit314.testservice.integration.judge0.dto.response.*;
@@ -30,7 +31,7 @@ public class Judge0ServiceIntegration {
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(judge0baseUrl));
     }
 
-
+    @TrackExecutionTime
     public SubmissionVerdictResponseDto executeTestCase(String code, String input, String expectedOutput) throws InterruptedException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-RapidAPI-Key", "471015e19cmsh7fe384858bf8c86p1d65e2jsn8c49a074a372");
@@ -48,7 +49,7 @@ public class Judge0ServiceIntegration {
             if(submissionVerdict.getStatusCode().is2xxSuccessful()){
                 /*If the code is in queue or in processing, send the request again*/
                 while (submissionVerdict.getBody().getStatus().getId() == 1 || submissionVerdict.getBody().getStatus().getId() == 2){
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                     submissionVerdict = restTemplate
                             .exchange(judge0baseUrl + "/submissions/" + token+ "?base64_encoded=false&fields=stdout,stdin,status", HttpMethod.GET,
                                     new HttpEntity<>(null, headers), SubmissionVerdictResponseDto.class);
@@ -59,14 +60,13 @@ public class Judge0ServiceIntegration {
                 throw new RuntimeException("Error");
 
             }
-
         }
         else{
             throw new RuntimeException("Error");
         }
 
     }
-
+    @TrackExecutionTime
     public SubmissionBatchResponseDto getExpectedOutputBatch(SubmissionBatchRequestDto submissionBatchRequestDto) throws InterruptedException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-RapidAPI-Key", "471015e19cmsh7fe384858bf8c86p1d65e2jsn8c49a074a372");
@@ -93,8 +93,8 @@ public class Judge0ServiceIntegration {
 
             if (submissionBatchResponseDtoResponseEntity.getStatusCode().is2xxSuccessful()) {
                 while (isOneStdOutNull(Objects.requireNonNull(submissionBatchResponseDtoResponseEntity.getBody()))) {
-                    /*Retry after 2 seconds*/
-                    Thread.sleep(2000);
+                    /*Retry after 0.1 seconds*/
+                    Thread.sleep(100);
                     submissionBatchResponseDtoResponseEntity = restTemplate
                             .exchange(judge0baseUrl + "/submissions/batch?tokens=" + tokenParam.toString() + "&base64_encoded=false&fields=stdin,stdout", HttpMethod.GET,
                                     new HttpEntity<>(null, headers), SubmissionBatchResponseDto.class);

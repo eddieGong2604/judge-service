@@ -57,5 +57,15 @@ public class TestCaseMapperImpl implements TestCaseMapper {
         }
         return dtos;
     }
-
+    @Override
+    public List<TestCaseResponseDto> fromSubmissionBatchResponseToTestcaseResponseDto(SubmissionBatchResponseDto submissionBatchResponseDto) {
+        ArrayList<TestCaseResponseDto> dtos = new ArrayList<>();
+        for(SubmissionResponseDto submissionResponseDto : submissionBatchResponseDto.getSubmissions()){
+            TestCaseResponseDto testCaseResponseDto = new TestCaseResponseDto();
+            testCaseResponseDto.setInput(submissionResponseDto.getStdin());
+            testCaseResponseDto.setExpectedOutput(submissionResponseDto.getStdout());
+            dtos.add(testCaseResponseDto);
+        }
+        return dtos;
+    }
 }
