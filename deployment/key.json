@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "aqueous-tube-251208",
+  "private_key_id": "99d9751237e937de15ae0d6437dd750fcb2e9e32",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC0E5RyogqpA/Cx\neol1p5Ud55zyOKctyYWw+WAS+FDAgw3NtQF/mFbOev8ewifQ+sh5ezE3b/nMQbjX\n+0s/6yJrJohuB+bSEUMSXWnhcOXNrHnY2zUhbaOZ/rYs7HpEje3EFkEhq2Um8LBL\nopRR1S9K/X834vyCvF6drnGTId00yktkD9Q3gHjQu5HQ96TnKm6Gt8Uxb/teDrkg\n3qUXDge+ftyl71zWFeqrmp8t64PGDpt7DDqbCQGYxAEFe7HuwM0QIhDNb9Gqim//\naaoCoPztnxUVDVowFZQ6IXheq0Duv8NNGOLVr2WPCmOgx4N4oaNTSDWuyb44/Sqg\n9pIQVTOfAgMBAAECgf9nK8R1AAMmYOQBUpZKTvTw5BpLOaVyXAHyQq/LZhqymw3+\n+iijT3EXUEnOfjnahE48mNujT8Vo/D6Yg+oQTLDPx3t0jaH5D7dRovPbbDJQe560\nGe+wOgLzhlpXpm97I2FYlvBQYNTvc7nfJHop1h71OCyVgxbali5lFLr2udnWMeuY\n7ureKRRT7sElBJfMWxN78CkVWMNVXAiEp51Tap7vxCOYb9pFxiCPU10rAJ16lc+z\nQHlxLSxL1GPmB1SPcijY/ioZKOD8pe0Ofor1OsZ4F1nyVMTN+9J0zvzBQDQr6bgB\nL1cg8CA3678USAxghWyPnp8gUjIQmXT4iYL+SqkCgYEA9vBw3NGb2Uq0loZ8X6Kd\nM0dseqmZno1pGVU19WXj3qZMpkyHAS52WMbso5qDUzYZZaSYOtQ5NfUHP2n5EmSU\n3jbJrhMc2FG4Sqg/UjbkdUPyxBzXaTyVT+nCjiHt1nVKoC/QUFtNBQY0p6LPnJo1\ntYizd8vdLP8bNy+hFTmUIxMCgYEAuq8U0a3V1CHFWngjjdVABocZHp5AbOWnpM+o\nRRmcxBq5o5g5fnEUCPnnu2sc70DyC0/IDhR6F+qlswBVyRgA5d5E7zTshnfC6Z3f\nb6nkCmjfyBkdWyfJdVTNPtoXyWIHLyvUjXYHcLfQct7Ah0r9d3zUinBwFTFrzbOm\nk8ahssUCgYEAxv4DNS8EdBorZJGDcF3OaCBKXp6FWKuD4hI0pUgyVJ2WbvyEXoNe\ngzPqRfyhj1CtLqdwtReH8t89s/Bl8lhzTo6//zMPr5JK/H6QaGQrvgO/giHrxLY5\nbGhni7nzuzpRpLxjFh489quFiwE8ZGowldVPKl5yIWyCNfp/yGbZ5VkCgYAzhXRi\nde5okDVuRW/SigMUih51o8k2BJ+izaisAWiReqq3KqDbc4vK+mVpBSPEKBFk68zT\njfUwOpMmdrY2PIiq6A/wUJPifJTvcqGiqKmF8fGowL2oVa+00QWgDgK4knRXIWqU\n6/kbs680tKM/84NGgc4KswNL5grRh342lIA13QKBgQCR8V8CDj2P41Go2hBh7zAX\ndvtt8J1sK1IZQ1GvFzAC4BJx4RtB7bAH+YNr58qToBgGh0IkOs7uu81pgKupgK4W\njAjv2eJEn79bbJGUVwx88vCAT9vZqIJybfJYPdjMAUIw36zePDinBjDC/vW7yQpn\nl11sBFedsqlwa3ofB0RIMQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "owner-968@aqueous-tube-251208.iam.gserviceaccount.com",
+  "client_id": "106362484858650108158",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/owner-968%40aqueous-tube-251208.iam.gserviceaccount.com"
+}

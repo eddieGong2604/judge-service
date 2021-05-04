@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-service
+  labels:
+    app: test-service
+spec:
+  template:
+    metadata:
+      labels:
+        app: test-service
+    spec:
+      containers:
+        - name: test-service
+          imagePullPolicy: IfNotPresent
+          image: asia.gcr.io/aqueous-tube-251208/test-serivce:0.1.0
+          envFrom:
+            - secretRef:
+                name: data-source
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.22
+          command: ["/cloud_sql_proxy","-instances=aqueous-tube-251208:us-central1:judge-service-test=tcp:5432",
+          "credential_file=/var/google/secret/key.json"]
+          volumeMounts:
+            - mountPath: /var/google/secret
+              name: owner_key
+              readOnly: true
+      volumes:
+        - name: owner_key
+          secret:
+            secretName: owner_key
+  selector:
+    matchLabels:
+      app: test-service
