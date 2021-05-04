@@ -5,6 +5,7 @@ metadata:
   labels:
     app: test-service
 spec:
+  replicas: 3
   template:
     metadata:
       labels:
@@ -12,6 +13,8 @@ spec:
     spec:
       containers:
         - name: test-service
+          ports:
+            - containerPort: 9090
           imagePullPolicy: IfNotPresent
           image: asia.gcr.io/aqueous-tube-251208/test-serivce:0.1.0
           envFrom:
