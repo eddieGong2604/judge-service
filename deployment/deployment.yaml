@@ -29,9 +29,9 @@ spec:
               name: owner_key
               readOnly: true
       volumes:
-        - name: owner_key
+        - name: owner-key
           secret:
-            secretName: owner_key
+            secretName: owner-key
   selector:
     matchLabels:
       app: test-service
