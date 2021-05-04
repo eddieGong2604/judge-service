@@ -20,14 +20,14 @@ spec:
           envFrom:
             - secretRef:
                 name: data-source
-        - name: cloudsql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.22.0
-          command: ["/cloud_sql_proxy","-instances=aqueous-tube-251208:us-central1:judge-service-test=tcp:5432",
-          "credential_file=/var/google/secret/key.json"]
-          volumeMounts:
-            - mountPath: /var/google/secret
-              name: owner-key
-              readOnly: true
+#        - name: cloudsql-proxy
+#          image: gcr.io/cloudsql-docker/gce-proxy:1.22.0
+#          command: ["/cloud_sql_proxy","-instances=aqueous-tube-251208:us-central1:judge-service-test=tcp:5432",
+#          "credential_file=/var/google/secret/key.json"]
+#          volumeMounts:
+#            - mountPath: /var/google/secret
+#              name: owner-key
+#              readOnly: true
       volumes:
         - name: owner-key
           secret:
