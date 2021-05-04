@@ -29,7 +29,7 @@ public class RedisConfig {
     }
     @Bean
     public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig) throws  URISyntaxException {
-        String envRedisUrl = System.getenv("redis://:p8769bf82649f5bd9a496345fbfa37a71fa7cf16a936ca97181db45b1cc66d3cb@ec2-34-227-188-167.compute-1.amazonaws.com:28450");
+        String envRedisUrl = "redis://:p8769bf82649f5bd9a496345fbfa37a71fa7cf16a936ca97181db45b1cc66d3cb@ec2-34-227-188-167.compute-1.amazonaws.com:28450";
         URI redisUri = new URI(envRedisUrl);
         RedisStandaloneConfiguration hostConfig = new RedisStandaloneConfiguration();
         hostConfig.setPort(redisUri.getPort());
