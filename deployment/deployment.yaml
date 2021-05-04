@@ -12,14 +12,14 @@ spec:
         app: test-service
     spec:
       containers:
-#        - name: test-service
-#          ports:
-#            - containerPort: 9090
-#          imagePullPolicy: IfNotPresent
-#          image: asia.gcr.io/aqueous-tube-251208/test-service:0.1.0
-#          envFrom:
-#            - secretRef:
-#                name: data-source
+        - name: test-service
+          ports:
+            - containerPort: 9090
+          imagePullPolicy: IfNotPresent
+          image: asia.gcr.io/aqueous-tube-251208/test-service:0.1.0
+          envFrom:
+            - secretRef:
+                name: data-source
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.22.0
           command: ["/cloud_sql_proxy","-instances=aqueous-tube-251208:us-central1:judge-service-test=tcp:5432",
