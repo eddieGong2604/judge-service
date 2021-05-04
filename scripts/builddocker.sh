@@ -14,7 +14,6 @@ Example:
   exit 1
 fi
 
-
 service_name=$1
 project=$2
 path_to_pom=$3

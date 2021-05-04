@@ -10,7 +10,7 @@ Example:
 
 ./deploy.sh iam-service fhs_product
   """
-    
+
   exit 1
 fi
 
@@ -27,4 +27,5 @@ echo "------------BUILD------------"
 echo "------------DEPLOY-----------"
 echo "Cluster: ${cluster_name} - ${cluster_location} - ${project_name}"
 gcloud container clusters get-credentials ${cluster_name} --region ${cluster_location} --project ${project_name}
-kubectl delete pod -l app=${service_name}
+kubectl delete deployments test-service
+kubectl apply -f ../deployment/deployment.yaml
