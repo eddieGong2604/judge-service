@@ -35,6 +35,10 @@ spec:
         resources: {}
         securityContext:
           privileged: true
+      - image: postgres:13.0
+        imagePullPolicy: ""
+        name: db
+        resources: { }
       restartPolicy: Always
       serviceAccountName: ""
 status: {}
