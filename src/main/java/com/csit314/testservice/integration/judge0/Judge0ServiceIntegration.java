@@ -23,7 +23,7 @@ public class Judge0ServiceIntegration {
 /*
     @Value("${judge0.service.base.url}")
 */
-    private final String judge0baseUrl = "http://10.3.246.52:2358";
+    private final String judge0baseUrl = "http://10.3.244.71:2358";
 
     @Autowired
     private RestTemplate restTemplate;
