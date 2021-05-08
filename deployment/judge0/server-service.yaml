@@ -8,7 +8,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: judge0-server
-  name: server
+  name: judge0-server
 spec:
   ports:
   - name: "2358"
