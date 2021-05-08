@@ -40,8 +40,3 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/changelog-master.xml
     default-schema: test_service_schema
-
-judge0:
-  service:
-    base:
-      url: 'http://10.3.246.52:2358'
