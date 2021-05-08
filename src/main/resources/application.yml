@@ -43,4 +43,4 @@ spring:
 judge0:
   service:
     base:
-      url: https://judge0-ce.p.rapidapi.com
+      url: http://10.3.246.52:2358
