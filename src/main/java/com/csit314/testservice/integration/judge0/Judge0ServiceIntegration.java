@@ -20,8 +20,10 @@ import java.util.Objects;
 
 @Component
 public class Judge0ServiceIntegration {
+/*
     @Value("${judge0.service.base.url}")
-    private String judge0baseUrl;
+*/
+    private final String judge0baseUrl = "http://10.3.246.52:2358";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -34,7 +36,6 @@ public class Judge0ServiceIntegration {
     @TrackExecutionTime
     public SubmissionVerdictResponseDto executeTestCase(String code, String input, String expectedOutput) throws InterruptedException {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", "471015e19cmsh7fe384858bf8c86p1d65e2jsn8c49a074a372");
         ResponseEntity<SubmissionTokenResponseDto> tokenResponseDto = restTemplate
                 .postForEntity(judge0baseUrl + "/submissions?base64_encoded=false", new HttpEntity<>(SubmissionRequestDto.builder().source_code(code).language_id(52).stdin(input).expected_output(expectedOutput).build(), headers),
                         SubmissionTokenResponseDto.class);
