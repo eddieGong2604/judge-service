@@ -102,13 +102,6 @@ spec:
         imagePullPolicy: ""
         name: db
         resources: {}
-        volumeMounts:
-        - mountPath: /var/lib/postgresql/data/
-          name: postgres-data
       restartPolicy: Always
       serviceAccountName: ""
-      volumes:
-      - name: postgres-data
-        persistentVolumeClaim:
-          claimName: postgres-data
 status: {}
