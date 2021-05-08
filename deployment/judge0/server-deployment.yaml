@@ -38,6 +38,9 @@ spec:
       - image: postgres:13.0
         imagePullPolicy: ""
         name: db
+        envFrom:
+          - configMapRef:
+              name: postgres-config
         resources: { }
       restartPolicy: Always
       serviceAccountName: ""
