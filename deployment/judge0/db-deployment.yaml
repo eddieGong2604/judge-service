@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\tienl\Desktop\CSIT314\kompose.exe --file docker-compose.yml
+      convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: db
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\tienl\Desktop\CSIT314\kompose.exe --file docker-compose.yml
+          convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: db
+    spec:
+      containers:
+      - env:
+        - name: ALLOWED_LANGUAGES_FOR_COMPILER_OPTIONS
+        - name: ALLOW_ENABLE_NETWORK
+        - name: ALLOW_ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT
+        - name: ALLOW_ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT
+        - name: ALLOW_IP
+        - name: ALLOW_ORIGIN
+        - name: AUTHN_HEADER
+        - name: AUTHN_TOKEN
+        - name: AUTHZ_HEADER
+        - name: AUTHZ_TOKEN
+        - name: CALLBACKS_MAX_TRIES
+        - name: CALLBACKS_TIMEOUT
+        - name: COUNT
+        - name: CPU_EXTRA_TIME
+        - name: CPU_TIME_LIMIT
+        - name: DISALLOW_IP
+        - name: DISALLOW_ORIGIN
+        - name: ENABLE_ADDITIONAL_FILES
+        - name: ENABLE_BATCHED_SUBMISSIONS
+        - name: ENABLE_CALLBACKS
+        - name: ENABLE_COMMAND_LINE_ARGUMENTS
+        - name: ENABLE_COMPILER_OPTIONS
+        - name: ENABLE_NETWORK
+        - name: ENABLE_PER_PROCESS_AND_THREAD_MEMORY_LIMIT
+        - name: ENABLE_PER_PROCESS_AND_THREAD_TIME_LIMIT
+        - name: ENABLE_SUBMISSION_DELETE
+        - name: ENABLE_WAIT_RESULT
+        - name: INTERVAL
+        - name: JUDGE0_TELEMETRY_ENABLE
+        - name: MAINTENANCE_MESSAGE
+        - name: MAINTENANCE_MODE
+        - name: MAX_CPU_EXTRA_TIME
+        - name: MAX_CPU_TIME_LIMIT
+        - name: MAX_EXTRACT_SIZE
+        - name: MAX_FILE_SIZE
+        - name: MAX_MAX_FILE_SIZE
+        - name: MAX_MAX_PROCESSES_AND_OR_THREADS
+        - name: MAX_MEMORY_LIMIT
+        - name: MAX_NUMBER_OF_RUNS
+        - name: MAX_PROCESSES_AND_OR_THREADS
+        - name: MAX_QUEUE_SIZE
+        - name: MAX_STACK_LIMIT
+        - name: MAX_SUBMISSION_BATCH_SIZE
+        - name: MAX_WALL_TIME_LIMIT
+        - name: MEMORY_LIMIT
+        - name: NUMBER_OF_RUNS
+        - name: POSTGRES_DB
+          value: postgres
+        - name: POSTGRES_HOST
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: root
+        - name: POSTGRES_PORT
+        - name: POSTGRES_USER
+          value: postgres
+        - name: RAILS_ENV
+        - name: RAILS_MAX_THREADS
+        - name: RAILS_SERVER_PROCESSES
+        - name: REDIRECT_STDERR_TO_STDOUT
+        - name: REDIS_HOST
+          value: redis
+        - name: REDIS_PASSWORD
+          value: ""
+        - name: REDIS_PORT
+        - name: RESTART_MAX_TRIES
+        - name: SECRET_KEY_BASE
+        - name: STACK_LIMIT
+        - name: SUBMISSION_CACHE_DURATION
+        - name: USE_DOCS_AS_HOMEPAGE
+        - name: WALL_TIME_LIMIT
+        image: postgres:13.0
+        imagePullPolicy: ""
+        name: db
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data/
+          name: postgres-data
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-data
+status: {}

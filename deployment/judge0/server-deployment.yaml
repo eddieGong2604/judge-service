@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\tienl\Desktop\CSIT314\kompose.exe --file docker-compose.yml
+      convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\tienl\Desktop\CSIT314\kompose.exe --file docker-compose.yml
+          convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: server
+    spec:
+      containers:
+      - image: judge0/judge0:latest
+        imagePullPolicy: ""
+        name: server
+        ports:
+        - containerPort: 2358
+        resources: {}
+        securityContext:
+          privileged: true
+      restartPolicy: Always
+      serviceAccountName: ""
+status: {}
