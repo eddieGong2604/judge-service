@@ -45,6 +45,14 @@ spec:
       - image: redis:6.0
         imagePullPolicy: ""
         name: judge0-redis
+      - args:
+        - ./scripts/workers
+        image: judge0/judge0:latest
+        imagePullPolicy: ""
+        name: judge0-worker
+        resources: { }
+        securityContext:
+          privileged: true
       restartPolicy: Always
       serviceAccountName: ""
 status: {}
