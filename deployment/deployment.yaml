@@ -17,6 +17,9 @@ spec:
             - containerPort: 9090
           imagePullPolicy:  Always
           image: asia.gcr.io/aqueous-tube-251208/test-service:0.1.0
+          env:
+            - name: JUDGE0-SERVICE
+              value: http://10.3.250.2:2358
           envFrom:
             - secretRef:
                 name: data-source
@@ -28,6 +31,9 @@ spec:
             - mountPath: /var/google/secret
               name: owner-key
               readOnly: true
+        - image: redis:6.0
+          imagePullPolicy: ""
+          name: test-service-redis
       volumes:
         - name: owner-key
           secret:

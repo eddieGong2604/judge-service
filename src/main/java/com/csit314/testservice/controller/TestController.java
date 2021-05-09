@@ -25,8 +25,8 @@ public class TestController {
         this.testCaseGenerationService = testCaseGenerationService;
     }
 
-    @GetMapping(value = "/testCases")
-    public ResponseEntity<?> getTestCases() throws InterruptedException {
+    @PostMapping(value = "/test-cases")
+    public ResponseEntity<?> generateTestCases() throws InterruptedException {
         List<TestCaseResponseDto> testCaseResponseDtos = testCaseGenerationService.generateTestCase();
         return new ResponseEntity<>(testCaseResponseDtos, HttpStatus.OK);
     }

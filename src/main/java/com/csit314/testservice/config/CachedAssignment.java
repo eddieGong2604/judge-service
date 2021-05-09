@@ -12,7 +12,7 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class CachedAssignment {
-    private String assignmentName;
     private String code;
+    private String assignmentName;
     private List<CachedTestCase> cachedTestCases = new ArrayList<>();
 }

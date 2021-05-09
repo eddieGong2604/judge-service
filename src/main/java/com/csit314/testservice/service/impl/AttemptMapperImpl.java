@@ -21,6 +21,7 @@ public class AttemptMapperImpl implements AttemptMapper{
         AttemptResponseDto attemptResponseDto = new AttemptResponseDto();
         attemptResponseDto.setAttemptId(attempt.getId());
         attemptResponseDto.setCode(attempt.getCode());
+        attemptResponseDto.setPassPercentage(attempt.getPassPercentage());
         attemptResponseDto.setTestCases(testCaseMapper.toDtos(attempt.getTestCases()));
         return attemptResponseDto;
     }
