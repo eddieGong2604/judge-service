@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Attempt extends BaseEntity {
     private String code;
+    private double passPercentage;
     @Transient
     private List<TestCase> testCases;
 }

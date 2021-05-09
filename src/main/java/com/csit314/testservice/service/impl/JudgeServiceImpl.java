@@ -15,6 +15,7 @@ import com.csit314.testservice.service.JudgeService;
 import com.csit314.testservice.service.TestCaseGenerationService;
 import com.csit314.testservice.service.TestCaseMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -76,5 +77,11 @@ public class JudgeServiceImpl implements JudgeService {
     public TestCaseResponseDto getTestCase(UUID attemptId, UUID testCaseId) {
         TestCase testCase = testCaseRepository.findByAttemptIdAndId(attemptId, testCaseId).orElseThrow(() -> new RuntimeException("not found"));
         return testCaseMapper.toDto(testCase);
+    }
+
+    @Override
+    public List<AttemptResponseDto> getAttemptsPassPercentage() {
+       List<Attempt> attempts = attemptRepository.findAll(Sort.by(Sort.Direction.ASC, "createdOn"));
+       return attemptMapper.toDtosWithPercentage(attempts);
     }
 }

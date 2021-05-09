@@ -43,14 +43,18 @@ public class TestController {
         return new ResponseEntity<>(testCase, HttpStatus.OK);
     }
     @GetMapping(value = "/attempts/{attemptId}")
-    public ResponseEntity<?> getAttemptById(@PathVariable("attemptId") UUID attemptId) throws InterruptedException {
+    public ResponseEntity<?> getAttemptById(@PathVariable("attemptId") UUID attemptId) {
         AttemptResponseDto attemptResponseDto = judgeService.getAttemptById(attemptId);
         return new ResponseEntity<>(attemptResponseDto, HttpStatus.OK);
     }
     @GetMapping(value = "/attempts/{attemptId}/{testCaseId}")
-    public ResponseEntity<?> getTestCase(@PathVariable("attemptId") UUID attemptId,@PathVariable("testCaseId") UUID testCaseId) throws InterruptedException {
+    public ResponseEntity<?> getTestCase(@PathVariable("attemptId") UUID attemptId,@PathVariable("testCaseId") UUID testCaseId) {
         TestCaseResponseDto testCase = judgeService.getTestCase(attemptId,testCaseId);
         return new ResponseEntity<>(testCase, HttpStatus.OK);
     }
-
+    @GetMapping(value = "/attempts/pass-percentage")
+    public ResponseEntity<?> getAttemptsPassPercentage() {
+        List<AttemptResponseDto> dtos = judgeService.getAttemptsPassPercentage();
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
 }
