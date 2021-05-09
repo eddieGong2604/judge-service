@@ -64,6 +64,8 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private String edgeCaseInputGenerator(){
         return "";
     }
+
+    /*hardcoded input to feed system for testing purpose, not for production*/
     private String inputGenerator() {
         return "20\t100\t\n" +
                 "1\t6\t25\n" +
