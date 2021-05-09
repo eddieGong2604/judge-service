@@ -52,6 +52,18 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         return testCaseMapper.fromSubmissionBatchResponseToTestcaseResponseDto(submissionBatchResponseDto);
     }
     /*TODO: Gen 5 medium Input, 4 small inputs, and 5 big input, 1 edge case*/
+    private String mediumInputGenerator(){
+        return "";
+    }
+    private String bigInputGenerator(){
+        return "";
+    }
+    private String smallInputGenerator(){
+        return "";
+    }
+    private String edgeCaseInputGenerator(){
+        return "";
+    }
     private String inputGenerator() {
         return "20\t100\t\n" +
                 "1\t6\t25\n" +
