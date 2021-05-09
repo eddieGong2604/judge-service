@@ -40,7 +40,8 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/changelog-master.xml
     default-schema: test_service_schema
+
 judge0:
   service:
     base:
-      url: ${JUDGE0-SERVICE}
+      url: ${JUDGE0_SERVICE}

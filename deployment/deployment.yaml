@@ -18,7 +18,7 @@ spec:
           imagePullPolicy:  Always
           image: asia.gcr.io/aqueous-tube-251208/test-service:0.1.0
           env:
-            - name: JUDGE0-SERVICE
+            - name: JUDGE0_SERVICE
               value: http://10.3.250.2:2358
           envFrom:
             - secretRef:
