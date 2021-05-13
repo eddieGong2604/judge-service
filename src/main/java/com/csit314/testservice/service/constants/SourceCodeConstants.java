@@ -73,7 +73,7 @@ public class SourceCodeConstants {
             "        cout <<\"Shortest path from \"<< start <<\" to \" << goal <<\": \" << endl;\n" +
             "        cout << \"Vertices of path: \" << start << \"-->\"<< goal << endl;\n" +
             "        cout << \"Length of path: \" << 0 << endl;\n" +
-            "        cout << \"There is no second shortest path.\" << endl\n" +
+            "        cout << \"There is no second shortest path.\" << endl;\n" +
             "        return;\n" +
             "    }\n" +
             "\n" +
