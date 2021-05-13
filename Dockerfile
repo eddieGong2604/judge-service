@@ -1,4 +1,4 @@
-FROM asia.gcr.io/aqueous-tube-251208/base-image-java:0.1.0
+FROM asia.gcr.io/tokyo-eye-313109/base-image-java:0.1.0
 
 ARG service_name
 
