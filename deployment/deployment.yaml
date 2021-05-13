@@ -16,28 +16,24 @@ spec:
           ports:
             - containerPort: 9090
           imagePullPolicy:  Always
-          image: asia.gcr.io/aqueous-tube-251208/test-service:0.1.0
+          image: asia.gcr.io/tokyo-eye-313109/test-service:0.1.0
           env:
             - name: JUDGE0_SERVICE
               value: http://10.3.250.2:2358
           envFrom:
             - secretRef:
                 name: data-source
-        - name: cloudsql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.22.0
-          command: ["/cloud_sql_proxy","-instances=aqueous-tube-251208:us-central1:judge-service-test=tcp:5432",
-          "-credential_file=/var/google/secret/key.json"]
-          volumeMounts:
-            - mountPath: /var/google/secret
-              name: owner-key
-              readOnly: true
+        - image: postgres:13.0
+          imagePullPolicy: ""
+          name: db-test-service
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: root
         - image: redis:6.0
           imagePullPolicy: ""
           name: test-service-redis
-      volumes:
-        - name: owner-key
-          secret:
-            secretName: owner-key
   selector:
     matchLabels:
       app: test-service
