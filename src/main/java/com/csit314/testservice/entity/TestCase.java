@@ -8,10 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -20,6 +17,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 public class TestCase extends BaseEntity {
     private Verdict verdict;
+    @Basic(fetch = FetchType.LAZY)
     private String input;
     private String expectedOutput;
     private String stdout;

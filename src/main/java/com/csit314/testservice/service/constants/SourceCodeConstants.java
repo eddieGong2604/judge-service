@@ -69,6 +69,14 @@ public class SourceCodeConstants {
             "    }\n" +
             "    cin >> start >> goal;\n" +
             "\n" +
+            "    if(start == goal){\n" +
+            "        cout <<\"Shortest path from \"<< start <<\" to \" << goal <<\": \" << endl;\n" +
+            "        cout << \"Vertices of path: \" << start << \"-->\"<< goal << endl;\n" +
+            "        cout << \"Length of path: \" << 0 << endl;\n" +
+            "        cout << \"There is no second shortest path.\" << endl\n" +
+            "        return;\n" +
+            "    }\n" +
+            "\n" +
             "    int length;\n" +
             "    double shortestPath = findShortestPath (vertices, edges, nVertices, start, goal, path);\n" +
             "\n" +

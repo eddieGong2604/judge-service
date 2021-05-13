@@ -17,8 +17,10 @@ public class TestCaseResponseDto {
     private UUID testCaseId;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Verdict verdict;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String input;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String stdout;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String expectedOutput;
 }

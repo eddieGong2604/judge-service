@@ -21,5 +21,5 @@ image_name="asia.gcr.io/${project}/${service_name}"
 
 cd ${path_to_pom}
 mvn clean install -Dmaven.test.skip=true
-docker build --build-arg service_name=test-service -t asia.gcr.io/aqueous-tube-251208/test-service:0.1.0 .
-docker push asia.gcr.io/aqueous-tube-251208/test-service:0.1.0
+docker build --build-arg service_name=${service_name} -t ${image_name}:0.1.0 .
+docker push ${image_name}:0.1.0

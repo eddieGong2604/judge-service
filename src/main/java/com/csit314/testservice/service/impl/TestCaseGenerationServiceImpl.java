@@ -1,6 +1,7 @@
 package com.csit314.testservice.service.impl;
 
 import com.csit314.testservice.config.CachedAssignment;
+import com.csit314.testservice.config.CachedTestCase;
 import com.csit314.testservice.controller.response.TestCaseResponseDto;
 import com.csit314.testservice.integration.judge0.Judge0ServiceIntegration;
 import com.csit314.testservice.integration.judge0.dto.request.SubmissionBatchRequestDto;
@@ -34,13 +35,13 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     @Override
-    public List<TestCaseResponseDto> generateTestCase() throws InterruptedException {
+    public List<CachedTestCase> generateTestCase() throws InterruptedException {
         final ValueOperations<String, CachedAssignment> operations = assignmentCache.opsForValue();
         if (!assignmentCache.hasKey(ASSIGNMENT_CACHE_KEY)) {
             operations.set(ASSIGNMENT_CACHE_KEY, CachedAssignment.builder().assignmentName(ASSIGNMENT_CACHE_KEY).code(SourceCodeConstants.CORRECT_SOURCE_CODE).build());
         }
         if (assignmentCache.hasKey(ASSIGNMENT_CACHE_KEY) && (operations.get(ASSIGNMENT_CACHE_KEY)).getCachedTestCases() != null) {
-            return testCaseMapper.fromCachedToResponseTestCase(Objects.requireNonNull(operations.get(ASSIGNMENT_CACHE_KEY)).getCachedTestCases());
+            return (Objects.requireNonNull(operations.get(ASSIGNMENT_CACHE_KEY)).getCachedTestCases());
         }
         SubmissionBatchRequestDto submissionBatchRequestDto = new SubmissionBatchRequestDto();
         /*Generate test cases*/
@@ -65,7 +66,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
         assignmentCache.delete(ASSIGNMENT_CACHE_KEY);
         operations.set(ASSIGNMENT_CACHE_KEY, updatedCachedAssignment);
-        return testCaseMapper.fromSubmissionBatchResponseToTestcaseResponseDto(submissionBatchResponseDto);
+        return updatedCachedAssignment.getCachedTestCases();
     }
 
     /*TODO: Gen 5 medium Input, 4 small inputs, and 5 big input, 1 edge case*/
@@ -82,7 +83,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     private String edgeCaseInputGenerator() {
-        return "0 0";
+        return "0 0\n0 0";
     }
     /*hardcoded input to feed system for testing purpose, not for production*/
     public String inputGenerator(int maxVertex) { // undirected graph with no loop

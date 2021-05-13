@@ -1,5 +1,6 @@
 package com.csit314.testservice.service.impl;
 
+import com.csit314.testservice.config.CachedTestCase;
 import com.csit314.testservice.controller.request.SourceCodeRequestDto;
 import com.csit314.testservice.controller.response.AttemptResponseDto;
 import com.csit314.testservice.controller.response.TestCaseResponseDto;
@@ -34,16 +35,16 @@ public class JudgeServiceImpl implements JudgeService {
     private final TestCaseMapper testCaseMapper;
     @Override
     public AttemptResponseDto createAttempt(SourceCodeRequestDto sourceCodeRequestDto) throws InterruptedException {
-        List<TestCaseResponseDto> testCaseResponseDtos = testCaseGenerationService.generateTestCase();
+        List<CachedTestCase> cachedTestCases = testCaseGenerationService.generateTestCase();
         /*Save new attempt to database*/
         Attempt attempt = attemptRepository.save(Attempt.builder().code(sourceCodeRequestDto.getCode()).build());
         List<TestCase> attemptTestCase = new ArrayList<>();
         /*Save attempt test case to database */
-        for(TestCaseResponseDto testCaseResponseDto : testCaseResponseDtos){
+        for(CachedTestCase cachedTestCase : cachedTestCases){
             TestCase testCase = new TestCase();
             testCase.setAttempt(attempt);
-            testCase.setInput(testCaseResponseDto.getInput());
-            testCase.setExpectedOutput(testCaseResponseDto.getExpectedOutput());
+            testCase.setInput(cachedTestCase.getInput());
+            testCase.setExpectedOutput(cachedTestCase.getExpectedOutput());
             attemptTestCase.add(testCaseRepository.save(testCase));
         }
         attempt.setTestCases(attemptTestCase);
@@ -77,7 +78,7 @@ public class JudgeServiceImpl implements JudgeService {
     @Override
     public TestCaseResponseDto getTestCase(UUID attemptId, UUID testCaseId) {
         TestCase testCase = testCaseRepository.findByAttemptIdAndId(attemptId, testCaseId).orElseThrow(() -> new RuntimeException("not found"));
-        return testCaseMapper.toDto(testCase);
+        return testCaseMapper.toDtoWithInputAndOutput(testCase);
     }
 
     @Override

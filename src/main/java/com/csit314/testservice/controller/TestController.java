@@ -1,5 +1,6 @@
 package com.csit314.testservice.controller;
 
+import com.csit314.testservice.config.CachedTestCase;
 import com.csit314.testservice.controller.request.SourceCodeRequestDto;
 import com.csit314.testservice.controller.response.AttemptResponseDto;
 import com.csit314.testservice.controller.response.TestCaseResponseDto;
@@ -27,7 +28,7 @@ public class TestController {
 
     @PostMapping(value = "/test-cases")
     public ResponseEntity<?> generateTestCases() throws InterruptedException {
-        List<TestCaseResponseDto> testCaseResponseDtos = testCaseGenerationService.generateTestCase();
+        List<CachedTestCase> testCaseResponseDtos = testCaseGenerationService.generateTestCase();
         return new ResponseEntity<>(testCaseResponseDtos, HttpStatus.OK);
     }
 

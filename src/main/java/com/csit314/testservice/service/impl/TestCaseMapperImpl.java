@@ -17,6 +17,14 @@ public class TestCaseMapperImpl implements TestCaseMapper {
     public TestCaseResponseDto toDto(TestCase testCase) {
         TestCaseResponseDto testCaseResponseDto = new TestCaseResponseDto();
         testCaseResponseDto.setTestCaseId(testCase.getId());
+        testCaseResponseDto.setVerdict(testCase.getVerdict());
+        return testCaseResponseDto;
+    }
+
+    @Override
+    public TestCaseResponseDto toDtoWithInputAndOutput(TestCase testCase) {
+        TestCaseResponseDto testCaseResponseDto = new TestCaseResponseDto();
+        testCaseResponseDto.setTestCaseId(testCase.getId());
         testCaseResponseDto.setInput(testCase.getInput());
         testCaseResponseDto.setVerdict(testCase.getVerdict());
         testCaseResponseDto.setExpectedOutput(testCase.getExpectedOutput());

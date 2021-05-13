@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TestCaseMapper {
     TestCaseResponseDto toDto(TestCase testCase);
-
+    TestCaseResponseDto toDtoWithInputAndOutput(TestCase testCase);
     List<TestCaseResponseDto> toDtos(List<TestCase> testCaseList);
 
     List<TestCaseResponseDto> fromCachedToResponseTestCase(List<CachedTestCase> cachedTestCases);

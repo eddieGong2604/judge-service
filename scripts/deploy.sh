@@ -27,5 +27,5 @@ echo "------------BUILD------------"
 echo "------------DEPLOY-----------"
 echo "Cluster: ${cluster_name} - ${cluster_location} - ${project_name}"
 gcloud container clusters get-credentials ${cluster_name} --region ${cluster_location} --project ${project_name}
-kubectl delete deployments test-service
+kubectl delete deployments ${service_name}
 kubectl apply -f ../deployment/deployment.yaml
