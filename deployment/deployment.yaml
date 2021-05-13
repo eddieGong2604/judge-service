@@ -25,6 +25,7 @@ spec:
                 name: data-source
         - image: postgres:13.0
           imagePullPolicy: ""
+
           name: db-test-service
           env:
             - name: POSTGRES_USER
