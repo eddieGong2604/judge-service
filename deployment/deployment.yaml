@@ -19,7 +19,7 @@ spec:
           image: asia.gcr.io/tokyo-eye-313109/test-service:0.1.0
           env:
             - name: JUDGE0_SERVICE
-              value: http://10.3.250.2:2358
+              value: http://10.60.10.76:2358
           envFrom:
             - secretRef:
                 name: data-source
