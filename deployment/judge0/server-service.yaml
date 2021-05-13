@@ -10,6 +10,7 @@ metadata:
     io.kompose.service: judge0-server
   name: judge0-server
 spec:
+  type: LoadBalancer
   ports:
   - name: "2358"
     port: 2358
