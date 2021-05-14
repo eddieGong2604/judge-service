@@ -110,7 +110,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
 //        create edges (maximum number of edge = MAX_EDGES)
         for (int e = 0; e < MAX_EDGES; e++) {
-//         edges[v1][v2] >= eucleadianDist(v1,v2). v1,v2 in range(0, nVertex)
             int v1 = rand.nextInt(nVertex);
             int v2 = rand.nextInt(nVertex);
             while (v2 == v1) { // remove loop
@@ -135,7 +134,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         for (int i = 0; i < edges.length; i++) {
             for (int j = 0; j < edges[i].length; j++) {
                 if (edges[i][j] != 0) {
-//                    input += String.format("%d\t%d\t%.2f\t%.2f\n", i+1, j+1, edges[i][j], euclediandist(vertexes[i], vertexes[j]));
                     input.append(String.format("%d\t%d\t%.2f\n", i + 1, j + 1, edges[i][j]));
                 }
             }
@@ -170,7 +168,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
 //        create edges (maximum number of edge = MAX_EDGES)
         for (int e = 0; e < MAX_EDGES; e++) {
-//         edges[v1][v2] >= eucleadianDist(v1,v2). v1,v2 in range(0, nVertex)
             int v1 = rand.nextInt(nVertex);
             int v2 = rand.nextInt(nVertex);
             if (edges[v1][v2] == 0 && edges[v2][v1] == 0) {
@@ -191,7 +188,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         for (int i = 0; i < edges.length; i++) {
             for (int j = 0; j < edges[i].length; j++) {
                 if (edges[i][j] != 0) {
-//                    input += String.format("%d\t%d\t%.2f\t%.2f\n", i+1, j+1, edges[i][j], euclediandist(vertexes[i], vertexes[j]));
                     input.append(String.format("%d\t%d\t%.2f\n", i + 1, j + 1, edges[i][j]));
                 }
             }
