@@ -69,7 +69,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         return updatedCachedAssignment.getCachedTestCases();
     }
 
-    /*TODO: Gen 5 medium Input, 4 small inputs, and 5 big input, 1 edge case*/
     private String mediumInputGenerator() {
         return inputGenerator(70);
     }
@@ -85,7 +84,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private String edgeCaseInputGenerator() {
         return "0 0\n0 0";
     }
-    /*hardcoded input to feed system for testing purpose, not for production*/
+
     public String inputGenerator(int maxVertex) { // undirected graph with no loop
 //        maxVertex = maximum number of vertex this graph can have
 //        init variable
@@ -110,7 +109,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
 //        create edges (maximum number of edge = MAX_EDGES)
         for (int e = 0; e < MAX_EDGES; e++) {
-//         edges[v1][v2] >= eucleadianDist(v1,v2). v1,v2 in range(0, nVertex)
             int v1 = rand.nextInt(nVertex);
             int v2 = rand.nextInt(nVertex);
             while (v2 == v1) { // remove loop
@@ -122,27 +120,33 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
             }
         }
 
-//        generate input
+//        GENERATE INPUT
+//        1st line: nVertex nEdge
         input.append(String.format("%d\t%d\n", nVertex, nEdge));
+
+//        vertex lines: vertex xcoordinate ycoordinate
         for (int i = 0; i < nVertex; i++) {
             input.append(String.format("%d\t%.2f\t%.2f\n", i + 1, vertexes[i][0], vertexes[i][1]));
         }
+
+//        edge lines: vertex vertex weight
         for (int i = 0; i < edges.length; i++) {
             for (int j = 0; j < edges[i].length; j++) {
                 if (edges[i][j] != 0) {
-//                    input += String.format("%d\t%d\t%.2f\t%.2f\n", i+1, j+1, edges[i][j], euclediandist(vertexes[i], vertexes[j]));
                     input.append(String.format("%d\t%d\t%.2f\n", i + 1, j + 1, edges[i][j]));
                 }
             }
         }
-        input.append(String.format("%d\t%d\n", startVertex, goalVertex));
+
+//        last line: startVertex goalVertex
+        input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
         return input.toString();
     }
 
 
     public String inputLoopGenerator(int maxVertex) { // undirected graph may contain loop
 //        maxVertex = maximum number of vertex this graph can have
-//        init variable
+//        INIT VARIABLE
         StringBuilder input = new StringBuilder();
         Random rand = new Random();
         int nVertex = rand.nextInt(maxVertex) + 1; // number of vertex
@@ -150,11 +154,10 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         int goalVertex = rand.nextInt(nVertex);
         int nEdge = 0;
         final int MAX_EDGES = nVertex * (nVertex - 1) / 2; // maximum edge in undirected graph
-
-//        Vertex[] vertexes = new Vertex[nVertex];
         double[][] vertexes = new double[nVertex][2];
         double[][] edges = new double[nVertex][nVertex]; // edges[vertex1][vertex2] = weight if edge(vertex1 - vertex2) = weight
 
+//        CREATE VERTEX AND EDGE
 //        create vertexes (the number of vertex = nVertex)
         for (int v = 0; v < nVertex; v++) {
             double x = rand.nextDouble() * maxVertex; // randomly generate x coordiate
@@ -164,7 +167,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
 //        create edges (maximum number of edge = MAX_EDGES)
         for (int e = 0; e < MAX_EDGES; e++) {
-//         edges[v1][v2] >= eucleadianDist(v1,v2). v1,v2 in range(0, nVertex)
             int v1 = rand.nextInt(nVertex);
             int v2 = rand.nextInt(nVertex);
             if (edges[v1][v2] == 0 && edges[v2][v1] == 0) {
@@ -172,20 +174,26 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
                 nEdge++;
             }
         }
-//        generate input
+//        GENERATE INPUT
+//        1st line: nVertex nEdge
         input.append(String.format("%d\t%d\n", nVertex, nEdge));
+
+//        vertex lines: vertex xcoordinate ycoordinate
         for (int i = 0; i < nVertex; i++) {
             input.append(String.format("%d\t%.2f\t%.2f\n", i + 1, vertexes[i][0], vertexes[i][1]));
         }
+
+//        edge lines: vertex vertex weight
         for (int i = 0; i < edges.length; i++) {
             for (int j = 0; j < edges[i].length; j++) {
                 if (edges[i][j] != 0) {
-//                    input += String.format("%d\t%d\t%.2f\t%.2f\n", i+1, j+1, edges[i][j], euclediandist(vertexes[i], vertexes[j]));
                     input.append(String.format("%d\t%d\t%.2f\n", i + 1, j + 1, edges[i][j]));
                 }
             }
         }
-        input.append(String.format("%d\t%d\n", startVertex, goalVertex));
+
+//        last line: startVertex goalVertex
+        input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
         return input.toString();
     }
 
