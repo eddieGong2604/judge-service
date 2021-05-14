@@ -4,13 +4,20 @@ import com.csit314.testservice.config.CachedTestCase;
 import com.csit314.testservice.controller.request.SourceCodeRequestDto;
 import com.csit314.testservice.controller.response.AttemptResponseDto;
 import com.csit314.testservice.controller.response.TestCaseResponseDto;
+import com.csit314.testservice.service.FileStorageService;
 import com.csit314.testservice.service.JudgeService;
 import com.csit314.testservice.service.TestCaseGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,10 +26,11 @@ public class TestController {
 
     private final JudgeService judgeService;
     private final TestCaseGenerationService testCaseGenerationService;
-
+    private final FileStorageService fileStorageService;
     @Autowired
-    public TestController(JudgeService judgeService, TestCaseGenerationService testCaseGenerationService) {
+    public TestController(JudgeService judgeService, TestCaseGenerationService testCaseGenerationService, FileStorageService fileStorageService) {
         this.judgeService = judgeService;
+        this.fileStorageService = fileStorageService;
         this.testCaseGenerationService = testCaseGenerationService;
     }
 
@@ -58,4 +66,15 @@ public class TestController {
         List<AttemptResponseDto> dtos = judgeService.getAttemptsPassPercentage();
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
+
+    @GetMapping("/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException {
+        Resource resource = fileStorageService.loadFileAsResource(fileName);
+        String contentType = "text/plain";
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\"" + fileName + "\"")
+                .body(resource);
+    }
+
 }
