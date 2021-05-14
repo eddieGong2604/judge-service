@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -16,7 +19,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestCase extends BaseEntity {
-    private Verdict verdict;
+    private Verdict verdict = Verdict.PENDING;
     @Basic(fetch = FetchType.LAZY)
     private String input;
     private String expectedOutput;
