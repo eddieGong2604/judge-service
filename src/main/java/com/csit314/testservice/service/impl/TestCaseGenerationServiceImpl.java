@@ -69,7 +69,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         return updatedCachedAssignment.getCachedTestCases();
     }
 
-    /*TODO: Gen 5 medium Input, 4 small inputs, and 5 big input, 1 edge case*/
     private String mediumInputGenerator() {
         return inputGenerator(70);
     }
@@ -85,7 +84,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private String edgeCaseInputGenerator() {
         return "0 0\n0 0";
     }
-    /*hardcoded input to feed system for testing purpose, not for production*/
+
     public String inputGenerator(int maxVertex) { // undirected graph with no loop
 //        maxVertex = maximum number of vertex this graph can have
 //        init variable
