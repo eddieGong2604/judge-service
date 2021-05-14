@@ -122,11 +122,16 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
             }
         }
 
-//        generate input
+//        GENERATE INPUT
+//        1st line: nVertex nEdge
         input.append(String.format("%d\t%d\n", nVertex, nEdge));
+
+//        vertex lines: vertex xcoordinate ycoordinate
         for (int i = 0; i < nVertex; i++) {
             input.append(String.format("%d\t%.2f\t%.2f\n", i + 1, vertexes[i][0], vertexes[i][1]));
         }
+
+//        edge lines: vertex vertex weight
         for (int i = 0; i < edges.length; i++) {
             for (int j = 0; j < edges[i].length; j++) {
                 if (edges[i][j] != 0) {
@@ -135,14 +140,16 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
                 }
             }
         }
-        input.append(String.format("%d\t%d\n", startVertex, goalVertex));
+
+//        last line: startVertex goalVertex
+        input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
         return input.toString();
     }
 
 
     public String inputLoopGenerator(int maxVertex) { // undirected graph may contain loop
 //        maxVertex = maximum number of vertex this graph can have
-//        init variable
+//        INIT VARIABLE
         StringBuilder input = new StringBuilder();
         Random rand = new Random();
         int nVertex = rand.nextInt(maxVertex) + 1; // number of vertex
@@ -150,11 +157,10 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         int goalVertex = rand.nextInt(nVertex);
         int nEdge = 0;
         final int MAX_EDGES = nVertex * (nVertex - 1) / 2; // maximum edge in undirected graph
-
-//        Vertex[] vertexes = new Vertex[nVertex];
         double[][] vertexes = new double[nVertex][2];
         double[][] edges = new double[nVertex][nVertex]; // edges[vertex1][vertex2] = weight if edge(vertex1 - vertex2) = weight
 
+//        CREATE VERTEX AND EDGE
 //        create vertexes (the number of vertex = nVertex)
         for (int v = 0; v < nVertex; v++) {
             double x = rand.nextDouble() * maxVertex; // randomly generate x coordiate
@@ -172,11 +178,16 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
                 nEdge++;
             }
         }
-//        generate input
+//        GENERATE INPUT
+//        1st line: nVertex nEdge
         input.append(String.format("%d\t%d\n", nVertex, nEdge));
+
+//        vertex lines: vertex xcoordinate ycoordinate
         for (int i = 0; i < nVertex; i++) {
             input.append(String.format("%d\t%.2f\t%.2f\n", i + 1, vertexes[i][0], vertexes[i][1]));
         }
+
+//        edge lines: vertex vertex weight
         for (int i = 0; i < edges.length; i++) {
             for (int j = 0; j < edges[i].length; j++) {
                 if (edges[i][j] != 0) {
@@ -185,7 +196,9 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
                 }
             }
         }
-        input.append(String.format("%d\t%d\n", startVertex, goalVertex));
+
+//        last line: startVertex goalVertex
+        input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
         return input.toString();
     }
 
