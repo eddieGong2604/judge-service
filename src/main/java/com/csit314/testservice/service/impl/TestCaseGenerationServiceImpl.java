@@ -88,7 +88,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private void addBothShortestAndSecondShortestPathTestCaseToCache() throws InterruptedException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bigInputGenerator"), TestCaseSize.Big, TestCaseType.bothShortestAndSecondShortestPath, 10));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bigInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 10));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("mediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 15));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("smallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 5));
         operations.set(TestCaseType.bothShortestAndSecondShortestPath.toString(), testCases);
