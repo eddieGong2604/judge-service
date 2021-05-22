@@ -30,13 +30,13 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     /*Executed after the bean is instantiated*/
     @PostConstruct
     public void init() throws InterruptedException {
-        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.EdgeCase.toString()))){
+        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.edgeCase.toString()))){
             addEdgeCaseToCache();
         }
-        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.ShortestPathOnly.toString()))){
+        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.shortestPathOnly.toString()))){
             addShortestPathOnlyTestCaseToCache();
         }
-        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.BothShortestAndSecondShortestPath.toString()))){
+        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.bothShortestAndSecondShortestPath.toString()))){
             addBothShortestAndSecondShortestPathTestCaseToCache();
         }
     }
@@ -70,20 +70,20 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     /*Insert to redis database */
     private void addShortestPathOnlyTestCaseToCache(){
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
-        operations.set(TestCaseType.ShortestPathOnly.toString(), new ArrayList<>());
+        operations.set(TestCaseType.shortestPathOnly.toString(), new ArrayList<>());
     }
 
     private void addBothShortestAndSecondShortestPathTestCaseToCache() throws InterruptedException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(bigInputGenerator(),TestCaseSize.Big,TestCaseType.BothShortestAndSecondShortestPath,10));
-        testCases.addAll(generateTestCase(mediumInputGenerator(),TestCaseSize.Medium,TestCaseType.BothShortestAndSecondShortestPath,15));
-        testCases.addAll(generateTestCase(smallInputGenerator(),TestCaseSize.Small,TestCaseType.BothShortestAndSecondShortestPath,5));
-        operations.set(TestCaseType.BothShortestAndSecondShortestPath.toString(), testCases);
+        testCases.addAll(generateTestCase(bigInputGenerator(),TestCaseSize.Big,TestCaseType.bothShortestAndSecondShortestPath,10));
+        testCases.addAll(generateTestCase(mediumInputGenerator(),TestCaseSize.Medium,TestCaseType.bothShortestAndSecondShortestPath,15));
+        testCases.addAll(generateTestCase(smallInputGenerator(),TestCaseSize.Small,TestCaseType.bothShortestAndSecondShortestPath,5));
+        operations.set(TestCaseType.bothShortestAndSecondShortestPath.toString(), testCases);
     }
     private void addEdgeCaseToCache(){
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
-        operations.set(TestCaseType.EdgeCase.toString(), new ArrayList<>());
+        operations.set(TestCaseType.edgeCase.toString(), new ArrayList<>());
     }
 
 
