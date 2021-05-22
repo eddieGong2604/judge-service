@@ -23,7 +23,7 @@ public class AttemptResponseDto {
     private List<TestCaseResponseDto> testCases;
 
     public List<TestCaseResponseDto> getTestCases() {
-        Collections.sort(testCases);
+        testCases.sort(Collections.reverseOrder());
         return testCases;
     }
 }
