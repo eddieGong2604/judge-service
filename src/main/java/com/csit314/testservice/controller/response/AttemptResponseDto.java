@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,4 +21,9 @@ public class AttemptResponseDto {
     private double passPercentage;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<TestCaseResponseDto> testCases;
+
+    public List<TestCaseResponseDto> getTestCases() {
+        Collections.sort(testCases);
+        return testCases;
+    }
 }

@@ -17,5 +17,7 @@ create table if not exists test_case(
     verdict varchar,
     expected_output varchar,
     input varchar,
+    type varchar,
+    size varchar,
     constraint fk_qualification_practitioner foreign key(attempt_id) references attempt(id)
 );

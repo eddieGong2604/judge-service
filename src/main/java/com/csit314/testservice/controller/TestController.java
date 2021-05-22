@@ -4,6 +4,7 @@ import com.csit314.testservice.config.CachedTestCase;
 import com.csit314.testservice.controller.request.SourceCodeRequestDto;
 import com.csit314.testservice.controller.response.AttemptResponseDto;
 import com.csit314.testservice.controller.response.TestCaseResponseDto;
+import com.csit314.testservice.entity.enums.TestCaseType;
 import com.csit314.testservice.service.FileStorageService;
 import com.csit314.testservice.service.JudgeService;
 import com.csit314.testservice.service.TestCaseGenerationService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,24 +27,14 @@ import java.util.UUID;
 public class TestController {
 
     private final JudgeService judgeService;
-    private final TestCaseGenerationService testCaseGenerationService;
-    private final FileStorageService fileStorageService;
     @Autowired
-    public TestController(JudgeService judgeService, TestCaseGenerationService testCaseGenerationService, FileStorageService fileStorageService) {
+    public TestController(JudgeService judgeService) {
         this.judgeService = judgeService;
-        this.fileStorageService = fileStorageService;
-        this.testCaseGenerationService = testCaseGenerationService;
-    }
-
-    @PostMapping(value = "/test-cases")
-    public ResponseEntity<?> generateTestCases() throws InterruptedException {
-        List<CachedTestCase> testCaseResponseDtos = testCaseGenerationService.generateTestCase();
-        return new ResponseEntity<>(testCaseResponseDtos, HttpStatus.OK);
     }
 
     @PostMapping(value = "/attempts")
-    public ResponseEntity<?> createAttempt(@RequestBody SourceCodeRequestDto dto) throws InterruptedException {
-        AttemptResponseDto attempt = judgeService.createAttempt(dto);
+    public ResponseEntity<?> createAttempt(@RequestBody SourceCodeRequestDto dto,@RequestParam("testCaseTypes") List<String> testCaseTypes) throws InterruptedException {
+        AttemptResponseDto attempt = judgeService.createAttempt(dto, TestCaseType.convertFromStringsToEnums(testCaseTypes));
         return new ResponseEntity<>(attempt, HttpStatus.OK);
     }
 
@@ -65,16 +57,6 @@ public class TestController {
     public ResponseEntity<?> getAttemptsPassPercentage() {
         List<AttemptResponseDto> dtos = judgeService.getAttemptsPassPercentage();
         return new ResponseEntity<>(dtos, HttpStatus.OK);
-    }
-
-    @GetMapping("/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException {
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
-        String contentType = "text/plain";
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\"" + fileName + "\"")
-                .body(resource);
     }
 
 }

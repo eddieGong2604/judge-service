@@ -18,6 +18,8 @@ public class TestCaseMapperImpl implements TestCaseMapper {
         TestCaseResponseDto testCaseResponseDto = new TestCaseResponseDto();
         testCaseResponseDto.setTestCaseId(testCase.getId());
         testCaseResponseDto.setVerdict(testCase.getVerdict());
+        testCaseResponseDto.setSize(testCase.getSize());
+        testCaseResponseDto.setType(testCase.getType());
         return testCaseResponseDto;
     }
 
@@ -29,6 +31,8 @@ public class TestCaseMapperImpl implements TestCaseMapper {
         testCaseResponseDto.setVerdict(testCase.getVerdict());
         testCaseResponseDto.setExpectedOutput(testCase.getExpectedOutput());
         testCaseResponseDto.setStdout(testCase.getStdout());
+        testCaseResponseDto.setSize(testCase.getSize());
+        testCaseResponseDto.setType(testCase.getType());
         return testCaseResponseDto;
     }
 
@@ -48,6 +52,9 @@ public class TestCaseMapperImpl implements TestCaseMapper {
             TestCaseResponseDto testCaseResponseDto = new TestCaseResponseDto();
             testCaseResponseDto.setInput(testCase.getInput());
             testCaseResponseDto.setExpectedOutput(testCase.getExpectedOutput());
+            testCaseResponseDto.setSize(testCase.getSize());
+            testCaseResponseDto.setType(testCase.getType());
+
             dtos.add(testCaseResponseDto);
         }
         return dtos;

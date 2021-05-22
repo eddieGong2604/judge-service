@@ -1,8 +1,8 @@
 package com.csit314.testservice.service.impl;
 
-import com.csit314.testservice.config.CachedAssignment;
 import com.csit314.testservice.config.CachedTestCase;
-import com.csit314.testservice.controller.response.TestCaseResponseDto;
+import com.csit314.testservice.entity.enums.TestCaseSize;
+import com.csit314.testservice.entity.enums.TestCaseType;
 import com.csit314.testservice.integration.judge0.Judge0ServiceIntegration;
 import com.csit314.testservice.integration.judge0.dto.request.SubmissionBatchRequestDto;
 import com.csit314.testservice.integration.judge0.dto.request.SubmissionRequestDto;
@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -24,50 +25,67 @@ import java.util.Random;
 public class TestCaseGenerationServiceImpl implements TestCaseGenerationService {
     private final TestCaseMapperImpl testCaseMapper;
     private final Judge0ServiceIntegration judge0ServiceIntegration;
-    private final String ASSIGNMENT_CACHE_KEY = "CSCI203_ASSIGNMENT3";
-    private final RedisTemplate<String, CachedAssignment> assignmentCache;
+    private final RedisTemplate<String, List<CachedTestCase>> testCaseCache;
 
+    /*Executed after the bean is instantiated*/
     @PostConstruct
-    public void init() {
-        if (assignmentCache.hasKey(ASSIGNMENT_CACHE_KEY)) {
-            assignmentCache.delete(ASSIGNMENT_CACHE_KEY);
+    public void init() throws InterruptedException {
+        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.EdgeCase.toString()))){
+            addEdgeCaseToCache();
+        }
+        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.ShortestPathOnly.toString()))){
+            addShortestPathOnlyTestCaseToCache();
+        }
+        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.BothShortestAndSecondShortestPath.toString()))){
+            addBothShortestAndSecondShortestPathTestCaseToCache();
         }
     }
 
     @Override
-    public List<CachedTestCase> generateTestCase() throws InterruptedException {
-        final ValueOperations<String, CachedAssignment> operations = assignmentCache.opsForValue();
-        if (!assignmentCache.hasKey(ASSIGNMENT_CACHE_KEY)) {
-            operations.set(ASSIGNMENT_CACHE_KEY, CachedAssignment.builder().assignmentName(ASSIGNMENT_CACHE_KEY).code(SourceCodeConstants.CORRECT_SOURCE_CODE).build());
+    public List<CachedTestCase> getTestCaseByTypes(List<TestCaseType> testCaseTypes) {
+        final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
+        List<CachedTestCase> testCases = new ArrayList<>();
+        for(TestCaseType type : testCaseTypes){
+            testCases.addAll(Objects.requireNonNull(operations.get(type.toString())));
         }
-        if (assignmentCache.hasKey(ASSIGNMENT_CACHE_KEY) && (operations.get(ASSIGNMENT_CACHE_KEY)).getCachedTestCases() != null) {
-            return (Objects.requireNonNull(operations.get(ASSIGNMENT_CACHE_KEY)).getCachedTestCases());
-        }
-        SubmissionBatchRequestDto submissionBatchRequestDto = new SubmissionBatchRequestDto();
-        /*Generate test cases*/
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(mediumInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(mediumInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(mediumInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(mediumInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(mediumInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(bigInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(bigInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(bigInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(bigInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(bigInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(bigInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(smallInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(smallInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(smallInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(smallInputGenerator()).language_id(52).build());
-        submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(edgeCaseInputGenerator()).language_id(52).build());
-        SubmissionBatchResponseDto submissionBatchResponseDto = judge0ServiceIntegration.getExpectedOutputBatch(submissionBatchRequestDto);
-        CachedAssignment updatedCachedAssignment = CachedAssignment.builder().cachedTestCases(testCaseMapper.fromSubmissionBatchResponseToCachedTestCase(submissionBatchResponseDto)).assignmentName(ASSIGNMENT_CACHE_KEY).code(SourceCodeConstants.CORRECT_SOURCE_CODE).build();
-
-        assignmentCache.delete(ASSIGNMENT_CACHE_KEY);
-        operations.set(ASSIGNMENT_CACHE_KEY, updatedCachedAssignment);
-        return updatedCachedAssignment.getCachedTestCases();
+        return testCases;
     }
+
+
+    /*Helper method to generate test case*/
+    private List<CachedTestCase> generateTestCase(String stdin, TestCaseSize size, TestCaseType type, int quantity) throws InterruptedException {
+        SubmissionBatchRequestDto submissionBatchRequestDto = new SubmissionBatchRequestDto();
+        for(int i = 0; i < quantity;i++){
+            submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(stdin).language_id(52).build());
+        }
+        SubmissionBatchResponseDto submissionBatchResponseDto = judge0ServiceIntegration.getExpectedOutputBatch(submissionBatchRequestDto);
+        List<CachedTestCase> testCases = testCaseMapper.fromSubmissionBatchResponseToCachedTestCase(submissionBatchResponseDto);
+        for (CachedTestCase testCase : testCases) {
+            testCase.setSize(size);
+            testCase.setType(type);
+        }
+        return testCases;
+    }
+
+    /*Insert to redis database */
+    private void addShortestPathOnlyTestCaseToCache(){
+        final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
+        operations.set(TestCaseType.ShortestPathOnly.toString(), new ArrayList<>());
+    }
+
+    private void addBothShortestAndSecondShortestPathTestCaseToCache() throws InterruptedException {
+        final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
+        List<CachedTestCase> testCases = new ArrayList<>();
+        testCases.addAll(generateTestCase(bigInputGenerator(),TestCaseSize.Big,TestCaseType.BothShortestAndSecondShortestPath,10));
+        testCases.addAll(generateTestCase(mediumInputGenerator(),TestCaseSize.Medium,TestCaseType.BothShortestAndSecondShortestPath,15));
+        testCases.addAll(generateTestCase(smallInputGenerator(),TestCaseSize.Small,TestCaseType.BothShortestAndSecondShortestPath,5));
+        operations.set(TestCaseType.BothShortestAndSecondShortestPath.toString(), testCases);
+    }
+    private void addEdgeCaseToCache(){
+        final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
+        operations.set(TestCaseType.EdgeCase.toString(), new ArrayList<>());
+    }
+
 
     private String mediumInputGenerator() {
         return inputGenerator(70);
@@ -204,4 +222,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         double eucledianDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         return Math.random() * (2 * eucledianDistance + 1) + eucledianDistance;
     }
+
+
 }

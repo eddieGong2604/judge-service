@@ -6,6 +6,7 @@ import com.csit314.testservice.controller.response.AttemptResponseDto;
 import com.csit314.testservice.controller.response.TestCaseResponseDto;
 import com.csit314.testservice.entity.Attempt;
 import com.csit314.testservice.entity.TestCase;
+import com.csit314.testservice.entity.enums.TestCaseType;
 import com.csit314.testservice.entity.enums.Verdict;
 import com.csit314.testservice.integration.judge0.Judge0ServiceIntegration;
 import com.csit314.testservice.integration.judge0.dto.response.SubmissionVerdictResponseDto;
@@ -15,7 +16,6 @@ import com.csit314.testservice.service.AttemptMapper;
 import com.csit314.testservice.service.JudgeService;
 import com.csit314.testservice.service.TestCaseGenerationService;
 import com.csit314.testservice.service.TestCaseMapper;
-import com.csit314.testservice.service.constants.SourceCodeConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -34,8 +34,8 @@ public class JudgeServiceImpl implements JudgeService {
     private final Judge0ServiceIntegration judge0ServiceIntegration;
     private final TestCaseMapper testCaseMapper;
     @Override
-    public AttemptResponseDto createAttempt(SourceCodeRequestDto sourceCodeRequestDto) throws InterruptedException {
-        List<CachedTestCase> cachedTestCases = testCaseGenerationService.generateTestCase();
+    public AttemptResponseDto createAttempt(SourceCodeRequestDto sourceCodeRequestDto, List<TestCaseType> types) throws InterruptedException {
+        List<CachedTestCase> cachedTestCases = testCaseGenerationService.getTestCaseByTypes(types);
         /*Save new attempt to database*/
         Attempt attempt = attemptRepository.save(Attempt.builder().code(sourceCodeRequestDto.getCode()).build());
         List<TestCase> attemptTestCase = new ArrayList<>();
@@ -45,6 +45,8 @@ public class JudgeServiceImpl implements JudgeService {
             testCase.setAttempt(attempt);
             testCase.setInput(cachedTestCase.getInput());
             testCase.setExpectedOutput(cachedTestCase.getExpectedOutput());
+            testCase.setSize(cachedTestCase.getSize());
+            testCase.setType(cachedTestCase.getType());
             attemptTestCase.add(testCaseRepository.save(testCase));
         }
         attempt.setTestCases(attemptTestCase);
@@ -58,10 +60,10 @@ public class JudgeServiceImpl implements JudgeService {
         SubmissionVerdictResponseDto submissionVerdictResponseDto = judge0ServiceIntegration.executeTestCase(attempt.getCode(), testCase.getInput(),
                 testCase.getExpectedOutput());
         if(submissionVerdictResponseDto.getStatus().getId() == 3){
-            testCase.setVerdict(Verdict.ACCEPTED);
+            testCase.setVerdict(Verdict.Passed);
         }
         else{
-            testCase.setVerdict(Verdict.FAILED);
+            testCase.setVerdict(Verdict.Failed);
         }
         testCase.setStdout(submissionVerdictResponseDto.getStdout());
         return testCaseMapper.toDto(testCaseRepository.save(testCase));
