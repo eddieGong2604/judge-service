@@ -59,6 +59,7 @@ public class JudgeServiceImpl implements JudgeService {
         TestCase testCase = testCaseRepository.findByAttemptIdAndId(attemptId, testCaseId).orElseThrow(() -> new RuntimeException("not found"));
         SubmissionVerdictResponseDto submissionVerdictResponseDto = judge0ServiceIntegration.executeTestCase(attempt.getCode(), testCase.getInput(),
                 testCase.getExpectedOutput());
+        testCase.setStdout(submissionVerdictResponseDto.getStdout());
         if(submissionVerdictResponseDto.getStatus().getId() == 3){
             testCase.setVerdict(Verdict.Passed);
         }
@@ -71,7 +72,6 @@ public class JudgeServiceImpl implements JudgeService {
                 testCase.setStdout("Runtime Error");
             }
         }
-        testCase.setStdout(submissionVerdictResponseDto.getStdout());
         return testCaseMapper.toDto(testCaseRepository.save(testCase));
     }
 
