@@ -64,6 +64,12 @@ public class JudgeServiceImpl implements JudgeService {
         }
         else{
             testCase.setVerdict(Verdict.Failed);
+            if(submissionVerdictResponseDto.getStatus().getId()==6){
+                testCase.setStdout("Compilation Error");
+            }
+            else if(submissionVerdictResponseDto.getStatus().getId()==11){
+                testCase.setStdout("Runtime Error");
+            }
         }
         testCase.setStdout(submissionVerdictResponseDto.getStdout());
         return testCaseMapper.toDto(testCaseRepository.save(testCase));

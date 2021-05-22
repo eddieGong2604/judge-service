@@ -9,7 +9,6 @@ import com.csit314.testservice.integration.judge0.dto.request.SubmissionRequestD
 import com.csit314.testservice.integration.judge0.dto.response.SubmissionBatchResponseDto;
 import com.csit314.testservice.service.TestCaseGenerationService;
 import com.csit314.testservice.service.constants.SourceCodeConstants;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
