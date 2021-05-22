@@ -10,42 +10,54 @@ import com.csit314.testservice.integration.judge0.dto.response.SubmissionBatchRe
 import com.csit314.testservice.service.TestCaseGenerationService;
 import com.csit314.testservice.service.constants.SourceCodeConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
 @Service
-@RequiredArgsConstructor
 public class TestCaseGenerationServiceImpl implements TestCaseGenerationService {
-    private final TestCaseMapperImpl testCaseMapper;
-    private final Judge0ServiceIntegration judge0ServiceIntegration;
-    private final RedisTemplate<String, List<CachedTestCase>> testCaseCache;
+    @Autowired
+    private TestCaseMapperImpl testCaseMapper;
+    @Autowired
+    private Judge0ServiceIntegration judge0ServiceIntegration;
+    @Autowired
+    private RedisTemplate<String, List<CachedTestCase>> testCaseCache;
 
     /*Executed after the bean is instantiated*/
     @PostConstruct
-    public void init() throws InterruptedException {
-        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.edgeCase.toString()))){
+    public void init() throws InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        testCaseCache.delete(TestCaseType.edgeCase.toString());
+        testCaseCache.delete(TestCaseType.shortestPathOnly.toString());
+        testCaseCache.delete(TestCaseType.bothShortestAndSecondShortestPath.toString());
+        if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.edgeCase.toString()))) {
             addEdgeCaseToCache();
         }
-        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.shortestPathOnly.toString()))){
+        if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.shortestPathOnly.toString()))) {
             addShortestPathOnlyTestCaseToCache();
         }
-        if(!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.bothShortestAndSecondShortestPath.toString()))){
+        if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.bothShortestAndSecondShortestPath.toString()))) {
             addBothShortestAndSecondShortestPathTestCaseToCache();
         }
+    }
+
+    public TestCaseGenerationServiceImpl() {
+
     }
 
     @Override
     public List<CachedTestCase> getTestCaseByTypes(List<TestCaseType> testCaseTypes) {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        for(TestCaseType type : testCaseTypes){
+        for (TestCaseType type : testCaseTypes) {
             testCases.addAll(Objects.requireNonNull(operations.get(type.toString())));
         }
         return testCases;
@@ -53,9 +65,10 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
 
     /*Helper method to generate test case*/
-    private List<CachedTestCase> generateTestCase(String stdin, TestCaseSize size, TestCaseType type, int quantity) throws InterruptedException {
+    private List<CachedTestCase> generateTestCase(Method method, TestCaseSize size, TestCaseType type, int quantity) throws InterruptedException, InvocationTargetException, IllegalAccessException {
         SubmissionBatchRequestDto submissionBatchRequestDto = new SubmissionBatchRequestDto();
-        for(int i = 0; i < quantity;i++){
+        for (int i = 0; i < quantity; i++) {
+            String stdin = (String) method.invoke(new TestCaseGenerationServiceImpl());
             submissionBatchRequestDto.getSubmissions().add(SubmissionRequestDto.builder().source_code(SourceCodeConstants.CORRECT_SOURCE_CODE).stdin(stdin).language_id(52).build());
         }
         SubmissionBatchResponseDto submissionBatchResponseDto = judge0ServiceIntegration.getExpectedOutputBatch(submissionBatchRequestDto);
@@ -68,34 +81,34 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     /*Insert to redis database */
-    private void addShortestPathOnlyTestCaseToCache(){
+    private void addShortestPathOnlyTestCaseToCache() {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         operations.set(TestCaseType.shortestPathOnly.toString(), new ArrayList<>());
     }
 
-    private void addBothShortestAndSecondShortestPathTestCaseToCache() throws InterruptedException {
+    private void addBothShortestAndSecondShortestPathTestCaseToCache() throws InterruptedException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(bigInputGenerator(),TestCaseSize.Big,TestCaseType.bothShortestAndSecondShortestPath,10));
-        testCases.addAll(generateTestCase(mediumInputGenerator(),TestCaseSize.Medium,TestCaseType.bothShortestAndSecondShortestPath,15));
-        testCases.addAll(generateTestCase(smallInputGenerator(),TestCaseSize.Small,TestCaseType.bothShortestAndSecondShortestPath,5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bigInputGenerator"), TestCaseSize.Big, TestCaseType.bothShortestAndSecondShortestPath, 10));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("mediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 15));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("smallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 5));
         operations.set(TestCaseType.bothShortestAndSecondShortestPath.toString(), testCases);
     }
-    private void addEdgeCaseToCache(){
+
+    private void addEdgeCaseToCache() {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         operations.set(TestCaseType.edgeCase.toString(), new ArrayList<>());
     }
 
-
-    private String mediumInputGenerator() {
+    public String mediumInputGenerator() {
         return inputGenerator(70);
     }
 
-    private String bigInputGenerator() {
+    public String bigInputGenerator() {
         return inputGenerator(310);
     }
 
-    private String smallInputGenerator() {
+    public String smallInputGenerator() {
         return inputGenerator(30);
     }
 
