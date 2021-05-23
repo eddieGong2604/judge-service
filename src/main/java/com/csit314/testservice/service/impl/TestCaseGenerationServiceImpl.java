@@ -112,21 +112,37 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     private String edgeCaseInputGenerator() {
-        return "0 0\n0 0";
+        final int MAX_VERTEX = 1;
+        String input = "";
+        Random rand = new Random();
+        int nVertex = rand.nextInt(MAX_VERTEX+1);// generate nVertex in range 0 (inclusive) to 1 (inclusive)
+        switch (nVertex) {
+            case 0:
+                input =  "0 0\n0 0";
+                break;
+            case 1:
+                input = "1 0\n1 3.4 8.5\n1 1";
+                break;
+        }
+
+        return input;
     }
 
-    public String inputGenerator(int maxVertex) { // undirected graph with no loop
+    public String inputGenerator(int maxVertex) { // undirected graph with no loop, startVertex differs from goalVertex
 //        maxVertex = maximum number of vertex this graph can have
 //        init variable
         StringBuilder input = new StringBuilder();
         Random rand = new Random();
         int nVertex = rand.nextInt(maxVertex) + 1; // number of vertex
         int startVertex = rand.nextInt(nVertex);
+//        ensure goalVertex differs from startVertex
         int goalVertex = rand.nextInt(nVertex);
+        while(goalVertex == startVertex) {
+            goalVertex = rand.nextInt(nVertex);
+        }
         int nEdge = 0;
         final int MAX_EDGES = nVertex * (nVertex - 1) / 2; // maximum edge in undirected graph
 
-//        Vertex[] vertexes = new Vertex[nVertex];
         double[][] vertexes = new double[nVertex][2];
         double[][] edges = new double[nVertex][nVertex]; // edges[vertex1][vertex2] = weight if edge(vertex1 - vertex2) = weight
 
@@ -181,7 +197,11 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         Random rand = new Random();
         int nVertex = rand.nextInt(maxVertex) + 1; // number of vertex
         int startVertex = rand.nextInt(nVertex);
+//        ensure goalVertex differs from startVertex
         int goalVertex = rand.nextInt(nVertex);
+        while(goalVertex == startVertex) {
+            goalVertex = rand.nextInt(nVertex);
+        }
         int nEdge = 0;
         final int MAX_EDGES = nVertex * (nVertex - 1) / 2; // maximum edge in undirected graph
         double[][] vertexes = new double[nVertex][2];
@@ -204,6 +224,76 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
                 nEdge++;
             }
         }
+//        GENERATE INPUT
+//        1st line: nVertex nEdge
+        input.append(String.format("%d\t%d\n", nVertex, nEdge));
+
+//        vertex lines: vertex xcoordinate ycoordinate
+        for (int i = 0; i < nVertex; i++) {
+            input.append(String.format("%d\t%.2f\t%.2f\n", i + 1, vertexes[i][0], vertexes[i][1]));
+        }
+
+//        edge lines: vertex vertex weight
+        for (int i = 0; i < edges.length; i++) {
+            for (int j = 0; j < edges[i].length; j++) {
+                if (edges[i][j] != 0) {
+                    input.append(String.format("%d\t%d\t%.2f\n", i + 1, j + 1, edges[i][j]));
+                }
+            }
+        }
+
+//        last line: startVertex goalVertex
+        input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
+        return input.toString();
+    }
+
+    public String shortestPathOnlyInputGenerator(int maxVertex) { // generate input with only shortest path, no second shortest path
+//       generate a disconnected graph where startVertex and goalVertex are isolated from the rest of graph. Hence there is only 1 path between startVertex and goalVertex- this is also the shortest path between them, no second shortest path
+
+//        maxVertex = maximum number of vertex this graph can have
+//        init variable
+        StringBuilder input = new StringBuilder();
+        Random rand = new Random();
+        int nVertex = rand.nextInt(maxVertex) + 4; // number of vertex, min = 4
+        int startVertex = rand.nextInt(nVertex);
+//        ensure goalVertex differs from startVertex
+        int goalVertex;
+        do {
+            goalVertex = rand.nextInt(nVertex);
+        } while(goalVertex == startVertex);
+
+        int nEdge = 0;
+        final int MAX_EDGES = nVertex * (nVertex - 1) / 2; // maximum edge in undirected graph
+
+        double[][] vertexes = new double[nVertex][2];
+        double[][] edges = new double[nVertex][nVertex]; // edges[vertex1][vertex2] = weight if edge(vertex1 - vertex2) = weight
+
+//        create vertexes (the number of vertex = nVertex)
+        for (int v = 0; v < nVertex; v++) {
+            double x = rand.nextDouble() * maxVertex; // randomly generate x coordiate
+            double y = rand.nextDouble() * maxVertex; // randomly generate y coordiate
+            vertexes[v] = new double[]{x, y};
+        }
+
+//        create edges (maximum number of edge = MAX_EDGES)
+        edges[startVertex][goalVertex] = edgeWeight(vertexes[startVertex], vertexes[goalVertex]);
+        for (int e = 0; e < MAX_EDGES; e++) {
+            int v1, v2;
+//            make sure there are no edges link to start or goalVertex
+            do {
+                v1 = rand.nextInt(nVertex);
+            } while (v1 == goalVertex || v1 == startVertex);
+
+            do {
+                v2 = rand.nextInt(nVertex);
+            } while (v2 == goalVertex || v2 == startVertex || v2 == v1) ;
+
+            if (edges[v1][v2] == 0 && edges[v2][v1] == 0) {
+                edges[v1][v2] = edgeWeight(vertexes[v1], vertexes[v2]);
+                nEdge++;
+            }
+        }
+
 //        GENERATE INPUT
 //        1st line: nVertex nEdge
         input.append(String.format("%d\t%d\n", nVertex, nEdge));
