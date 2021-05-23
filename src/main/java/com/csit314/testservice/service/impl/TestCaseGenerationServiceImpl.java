@@ -316,7 +316,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
 //        GENERATE INPUT
 //        1st line: nVertex nEdge
-        input.append(String.format("%d\t%d\n", nVertex, nEdge));
+        input.append(String.format("%d\t%d\n", nVertex, nEdge+1));
 
 //        vertex lines: vertex xcoordinate ycoordinate
         for (int i = 0; i < nVertex; i++) {

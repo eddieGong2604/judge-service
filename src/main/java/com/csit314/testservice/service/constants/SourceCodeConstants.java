@@ -7,6 +7,7 @@ public class SourceCodeConstants {
             "#include <climits>\n" +
             "#include <math.h>\n" +
             "#include <cfloat>\n" +
+            "#include <float.h>\n" +
             "\n" +
             "using namespace std;\n" +
             "char fileName[50];\n" +
@@ -91,9 +92,14 @@ public class SourceCodeConstants {
             "    cout << \"Length of path: \" << shortestPath << endl;\n" +
             "\n" +
             "    double secondShortestPath = findSecondShortestPath (vertices, edges, nVertices, start, goal, path, path2nd);\n" +
+            "    if(secondShortestPath == DBL_MAX){\n" +
+            "        cout << \"There is no second shortest path.\" << endl;\n" +
+            "        return 0;\n" +
+            "    }\n" +
             "    cout <<\"\\nSecond shortest path from \"<< start <<\" to \" << goal <<\": \" << endl;\n" +
             "    cout<<\"Vertices of path: \";\n" +
             "    v = start;\n" +
+            "    \n" +
             "    while (v!=goal) {\n" +
             "        cout << v <<\"-->\";\n" +
             "        v = path2nd[v];\n" +
@@ -106,8 +112,12 @@ public class SourceCodeConstants {
             "\n" +
             "double findShortestPath (Vertex *vertices, double **edges, int nVertices, int start, int goal, int *path) {\n" +
             "    Dist *distance = new Dist[nVertices]; \n" +
+            "\n" +
             "    int endDistance = 0;\n" +
             "    double size[nVertices+1]; \n" +
+            "    for(int i = 0; i < nVertices + 1;i++){\n" +
+            "        size[i] = DBL_MAX;\n" +
+            "    }\n" +
             "    for (int i = 1; i <=nVertices; i++ ) {\n" +
             "        if (i != goal) {\n" +
             "            if (edges[goal][i]!=DBL_MAX ) {\n" +
@@ -127,7 +137,6 @@ public class SourceCodeConstants {
             "        if (v.vertex == start) {\n" +
             "            return size[start];\n" +
             "        }\n" +
-            "\n" +
             "        endDistance--;\n" +
             "        distance[0] = distance[endDistance];\n" +
             "        for (int i = 0; i < endDistance ; i++) {\n" +
@@ -141,7 +150,6 @@ public class SourceCodeConstants {
             "        makeheap(distance, endDistance);\n" +
             "    }\n" +
             "    while (endDistance > 0);\n" +
-            "\n" +
             "    return size[start];\n" +
             "};\n" +
             "\n" +
@@ -149,6 +157,7 @@ public class SourceCodeConstants {
             "double findSecondShortestPath (Vertex *vertices, double **edges, int nVertices, int start, int goal, int *shortestPath, int *secondShortestPath) {\n" +
             "    int v = start;\n" +
             "    double secondShortestPathSize = DBL_MAX;\n" +
+            "    bool ifSecondShortestPathExists = false;\n" +
             "    while (v!=goal) {\n" +
             "        int *path = new int[nVertices+1];\n" +
             "        int next = shortestPath[v];\n" +
@@ -159,6 +168,7 @@ public class SourceCodeConstants {
             "        edges[v][next] = removedEdge;\n" +
             "        edges[next][v] = removedEdge;\n" +
             "        if (pathSize < secondShortestPathSize) {\n" +
+            "            ifSecondShortestPathExists = true;\n" +
             "            secondShortestPathSize = pathSize;\n" +
             "            for (int i = 0; i<= nVertices; i++) {\n" +
             "                secondShortestPath[i] = path[i];\n" +
@@ -166,8 +176,12 @@ public class SourceCodeConstants {
             "        };\n" +
             "        v = next;\n" +
             "    }\n" +
-            "\n" +
-            "    return secondShortestPathSize;\n" +
+            "    if(ifSecondShortestPathExists){\n" +
+            "        return secondShortestPathSize;\n" +
+            "    }\n" +
+            "    else{\n" +
+            "        return DBL_MAX;\n" +
+            "    }\n" +
             "}\n" +
             "\n" +
             "void makeheap(Dist *heap, int end) {\n" +
