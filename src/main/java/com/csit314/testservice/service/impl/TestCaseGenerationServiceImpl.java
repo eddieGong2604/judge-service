@@ -34,6 +34,9 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     /*Executed after the bean is instantiated*/
     @PostConstruct
     public void init() throws InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        testCaseCache.delete(TestCaseType.edgeCase.toString());
+        testCaseCache.delete(TestCaseType.shortestPathOnly.toString());
+        testCaseCache.delete(TestCaseType.bothShortestAndSecondShortestPath.toString());
         if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.edgeCase.toString()))) {
             addEdgeCaseToCache();
         }
