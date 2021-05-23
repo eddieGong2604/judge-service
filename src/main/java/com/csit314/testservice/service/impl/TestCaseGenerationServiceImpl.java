@@ -80,38 +80,58 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     /*Insert to redis database */
-    private void addShortestPathOnlyTestCaseToCache() {
+    private void addShortestPathOnlyTestCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
-        operations.set(TestCaseType.shortestPathOnly.toString(), new ArrayList<>());
+        List<CachedTestCase> testCases = new ArrayList<>();
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyLargeInputGenerator"), TestCaseSize.Large, TestCaseType.shortestPathOnly, 10));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.shortestPathOnly, 15));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlySmallInputGenerator"), TestCaseSize.Small, TestCaseType.shortestPathOnly, 5));
+        operations.set(TestCaseType.shortestPathOnly.toString(), testCases);
     }
 
     private void addBothShortestAndSecondShortestPathTestCaseToCache() throws InterruptedException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bigInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 10));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("mediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 15));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("smallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondLargeInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 10));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 15));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondSmallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 5));
         operations.set(TestCaseType.bothShortestAndSecondShortestPath.toString(), testCases);
     }
 
-    private void addEdgeCaseToCache() {
+    private void addEdgeCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
-        operations.set(TestCaseType.edgeCase.toString(), new ArrayList<>());
+        List<CachedTestCase> testCases = new ArrayList<>();
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("edgeCaseInputGenerator"), TestCaseSize.Small, TestCaseType.edgeCase, 5));
+        operations.set(TestCaseType.edgeCase.toString(), testCases);
     }
 
-    public String mediumInputGenerator() {
+    public String bothShortestAndSecondMediumInputGenerator() {
         return inputGenerator(70);
     }
 
-    public String bigInputGenerator() {
+    public String bothShortestAndSecondLargeInputGenerator() {
         return inputGenerator(310);
     }
 
-    public String smallInputGenerator() {
+    public String bothShortestAndSecondSmallInputGenerator() {
         return inputGenerator(30);
     }
 
-    private String edgeCaseInputGenerator() {
+
+    public String shortestPathOnlyMediumInputGenerator() {
+        return shortestPathOnlyInputGenerator(70);
+    }
+
+    public String shortestPathOnlyLargeInputGenerator() {
+        return shortestPathOnlyInputGenerator(310);
+    }
+
+    public String shortestPathOnlySmallInputGenerator() {
+        return shortestPathOnlyInputGenerator(30);
+    }
+
+
+    public String edgeCaseInputGenerator() {
         final int MAX_VERTEX = 1;
         String input = "";
         Random rand = new Random();
