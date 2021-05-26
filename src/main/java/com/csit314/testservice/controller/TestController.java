@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +28,16 @@ import java.util.UUID;
 public class TestController {
 
     private final JudgeService judgeService;
+    private final TestCaseGenerationService testCaseGenerationService;
     @Autowired
-    public TestController(JudgeService judgeService) {
+    public TestController(JudgeService judgeService, TestCaseGenerationService testCaseGenerationService) {
         this.judgeService = judgeService;
+        this.testCaseGenerationService = testCaseGenerationService;
+    }
+    @GetMapping("/")
+    public String init() throws InterruptedException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        testCaseGenerationService.init();
+        return "Initialized";
     }
 
     @PostMapping(value = "/attempts")

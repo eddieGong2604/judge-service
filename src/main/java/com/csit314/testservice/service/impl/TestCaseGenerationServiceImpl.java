@@ -33,7 +33,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private RedisTemplate<String, List<CachedTestCase>> testCaseCache;
 
     /*Executed after the bean is instantiated*/
-    @PostConstruct
+    @Override
     public void init() throws InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
         if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.noPath.toString()))) {
