@@ -1,6 +1,7 @@
 package com.csit314.testservice.service.impl;
 
 import com.csit314.testservice.config.CachedTestCase;
+import com.csit314.testservice.entity.TestCase;
 import com.csit314.testservice.entity.enums.TestCaseSize;
 import com.csit314.testservice.entity.enums.TestCaseType;
 import com.csit314.testservice.integration.judge0.Judge0ServiceIntegration;
@@ -34,8 +35,12 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     /*Executed after the bean is instantiated*/
     @PostConstruct
     public void init() throws InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.edgeCase.toString()))) {
-            addEdgeCaseToCache();
+
+        if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.noPath.toString()))) {
+            addNoPathInputTestCaseToCache();
+        }
+        if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.inputError.toString()))) {
+            addInputErrorTestCaseToCache();
         }
         if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.shortestPathOnly.toString()))) {
             addShortestPathOnlyTestCaseToCache();
@@ -80,8 +85,8 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private void addShortestPathOnlyTestCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyLargeInputGenerator"), TestCaseSize.Large, TestCaseType.shortestPathOnly, 10));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.shortestPathOnly, 15));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyLargeInputGenerator"), TestCaseSize.Large, TestCaseType.shortestPathOnly, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.shortestPathOnly, 5));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlySmallInputGenerator"), TestCaseSize.Small, TestCaseType.shortestPathOnly, 5));
         operations.set(TestCaseType.shortestPathOnly.toString(), testCases);
     }
@@ -89,63 +94,71 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private void addBothShortestAndSecondShortestPathTestCaseToCache() throws InterruptedException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondLargeInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 10));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 15));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondLargeInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 5));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondSmallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 5));
+        testCases.removeIf(testCase -> testCase.getExpectedOutput().endsWith("."));
         operations.set(TestCaseType.bothShortestAndSecondShortestPath.toString(), testCases);
     }
 
-    private void addEdgeCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
+
+    private void addInputErrorTestCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("edgeCaseInputGenerator"), TestCaseSize.Small, TestCaseType.edgeCase, 5));
-        operations.set(TestCaseType.edgeCase.toString(), testCases);
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("inputErrorSmallGenerator"), TestCaseSize.Small, TestCaseType.inputError, 5));
+        operations.set(TestCaseType.inputError.toString(), testCases);
+    }
+
+    private void addNoPathInputTestCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
+        final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
+        List<CachedTestCase> testCases = new ArrayList<>();
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputBigGenerator"), TestCaseSize.Large, TestCaseType.noPath, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputMediumGenerator"), TestCaseSize.Medium, TestCaseType.noPath, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputSmallGenerator"), TestCaseSize.Small, TestCaseType.noPath, 5));
+        operations.set(TestCaseType.noPath.toString(), testCases);
     }
 
     public String bothShortestAndSecondMediumInputGenerator() {
-        return inputGenerator(70);
+        return bothShortestAndSecondShortestInputGenerator(50);
     }
 
     public String bothShortestAndSecondLargeInputGenerator() {
-        return inputGenerator(310);
+        return bothShortestAndSecondShortestInputGenerator(200);
     }
 
     public String bothShortestAndSecondSmallInputGenerator() {
-        return inputGenerator(30);
+        return bothShortestAndSecondShortestInputGenerator(10);
+
     }
 
-
     public String shortestPathOnlyMediumInputGenerator() {
-        return shortestPathOnlyInputGenerator(70);
+        return shortestPathOnlyInputGenerator(50);
     }
 
     public String shortestPathOnlyLargeInputGenerator() {
-        return shortestPathOnlyInputGenerator(310);
+        return shortestPathOnlyInputGenerator(200);
     }
 
     public String shortestPathOnlySmallInputGenerator() {
-        return shortestPathOnlyInputGenerator(30);
+        return shortestPathOnlyInputGenerator(10);
     }
-
-
+    public String inputErrorSmallGenerator(){
+        return inputErrorGenerator(10);
+    }
+    public String noPathInputSmallGenerator(){
+        return noPathInputGenerator(10);
+    }
+    public String noPathInputMediumGenerator(){
+        return noPathInputGenerator(50);
+    }
+    public String noPathInputBigGenerator(){
+        return noPathInputGenerator(200);
+    }
     public String edgeCaseInputGenerator() {
-        final int MAX_VERTEX = 1;
-        String input = "";
-        Random rand = new Random();
-        int nVertex = rand.nextInt(MAX_VERTEX+1);// generate nVertex in range 0 (inclusive) to 1 (inclusive)
-        switch (nVertex) {
-            case 0:
-                input =  "0 0\n0 0";
-                break;
-            case 1:
-                input = "1 0\n1 3.4 8.5\n1 1";
-                break;
-        }
-
-        return input;
+        return "0 0\n0 0";
     }
 
-    public String inputGenerator(int maxVertex) { // undirected graph with no loop, startVertex differs from goalVertex
+    public String bothShortestAndSecondShortestInputGenerator(int maxVertex) { // undirected graph with no loop, startVertex differs from goalVertex
 //        maxVertex = maximum number of vertex this graph can have
 //        init variable
         StringBuilder input = new StringBuilder();
@@ -154,7 +167,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         int startVertex = rand.nextInt(nVertex);
 //        ensure goalVertex differs from startVertex
         int goalVertex = rand.nextInt(nVertex);
-        while(goalVertex == startVertex) {
+        while (goalVertex == startVertex) {
             goalVertex = rand.nextInt(nVertex);
         }
         int nEdge = 0;
@@ -207,6 +220,73 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
 
+    public String inputErrorGenerator(int maxVertex) { // undirected graph with no loop, startVertex differs from goalVertex
+//        maxVertex = maximum number of vertex this graph can have
+//        init variable
+        StringBuilder input = new StringBuilder();
+        Random rand = new Random();
+        int nVertex = rand.nextInt(maxVertex) + 1; // number of vertex
+        int startVertex = rand.nextInt(nVertex);
+//        ensure goalVertex differs from startVertex
+        int goalVertex = rand.nextInt(nVertex);
+        while (goalVertex == startVertex) {
+            goalVertex = rand.nextInt(nVertex);
+        }
+        int nEdge = 0;
+        final int MAX_EDGES = nVertex * (nVertex - 1) / 2; // maximum edge in undirected graph
+
+        double[][] vertexes = new double[nVertex][2];
+        double[][] edges = new double[nVertex][nVertex]; // edges[vertex1][vertex2] = weight if edge(vertex1 - vertex2) = weight
+
+//        create vertexes (the number of vertex = nVertex)
+        for (int v = 0; v < nVertex; v++) {
+            double x = rand.nextDouble() * maxVertex; // randomly generate x coordiate
+            double y = rand.nextDouble() * maxVertex; // randomly generate y coordiate
+            vertexes[v] = new double[]{x, y};
+        }
+
+//        create edges (maximum number of edge = MAX_EDGES)
+        for (int e = 0; e < MAX_EDGES; e++) {
+            int v1 = rand.nextInt(nVertex);
+            int v2 = rand.nextInt(nVertex);
+            while (v2 == v1) { // remove loop
+                v2 = rand.nextInt(nVertex);
+            }
+            if (edges[v1][v2] == 0 && edges[v2][v1] == 0) {
+                edges[v1][v2] = edgeWeight(vertexes[v1], vertexes[v2]);
+                if(e == 1){
+                    edges[v1][v2] = -10;
+                }
+                nEdge++;
+            }
+        }
+
+//        GENERATE INPUT
+//        1st line: nVertex nEdge
+        input.append(String.format("%d\t%d\n", nVertex, nEdge));
+
+//        vertex lines: vertex xcoordinate ycoordinate
+        for (int i = 0; i < nVertex; i++) {
+            input.append(String.format("%d\t%.2f\t%.2f\n", i + 1, vertexes[i][0], vertexes[i][1]));
+        }
+
+//        edge lines: vertex vertex weight
+        for (int i = 0; i < edges.length; i++) {
+            for (int j = 0; j < edges[i].length; j++) {
+                if (edges[i][j] != 0) {
+                    input.append(String.format("%d\t%d\t%.2f\n", i + 1, j + 1, edges[i][j]));
+                }
+            }
+        }
+
+//        last line: startVertex goalVertex
+        input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
+        return input.toString();
+    }
+
+
+
+
     public String inputLoopGenerator(int maxVertex) { // undirected graph may contain loop
 //        maxVertex = maximum number of vertex this graph can have
 //        INIT VARIABLE
@@ -216,7 +296,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         int startVertex = rand.nextInt(nVertex);
 //        ensure goalVertex differs from startVertex
         int goalVertex = rand.nextInt(nVertex);
-        while(goalVertex == startVertex) {
+        while (goalVertex == startVertex) {
             goalVertex = rand.nextInt(nVertex);
         }
         int nEdge = 0;
@@ -277,7 +357,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         int goalVertex;
         do {
             goalVertex = rand.nextInt(nVertex);
-        } while(goalVertex == startVertex);
+        } while (goalVertex == startVertex);
 
         int nEdge = 0;
         final int MAX_EDGES = nVertex * (nVertex - 1) / 2; // maximum edge in undirected graph
@@ -303,7 +383,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
             do {
                 v2 = rand.nextInt(nVertex);
-            } while (v2 == goalVertex || v2 == startVertex || v2 == v1) ;
+            } while (v2 == goalVertex || v2 == startVertex || v2 == v1);
 
             if (edges[v1][v2] == 0 && edges[v2][v1] == 0) {
                 edges[v1][v2] = edgeWeight(vertexes[v1], vertexes[v2]);
@@ -313,7 +393,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
 
 //        GENERATE INPUT
 //        1st line: nVertex nEdge
-        input.append(String.format("%d\t%d\n", nVertex, nEdge+1));
+        input.append(String.format("%d\t%d\n", nVertex, nEdge + 1));
 
 //        vertex lines: vertex xcoordinate ycoordinate
         for (int i = 0; i < nVertex; i++) {
@@ -333,6 +413,82 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
         return input.toString();
     }
+
+
+
+    public String noPathInputGenerator(int maxVertex) { // generate input with only shortest path, no second shortest path
+//       generate a disconnected graph where startVertex and goalVertex are isolated from the rest of graph. Hence there is only 1 path between startVertex and goalVertex- this is also the shortest path between them, no second shortest path
+
+//        maxVertex = maximum number of vertex this graph can have
+//        init variable
+        StringBuilder input = new StringBuilder();
+        Random rand = new Random();
+        int nVertex = rand.nextInt(maxVertex) + 4; // number of vertex, min = 4
+        int startVertex = rand.nextInt(nVertex);
+//        ensure goalVertex differs from startVertex
+        int goalVertex;
+        do {
+            goalVertex = rand.nextInt(nVertex);
+        } while (goalVertex == startVertex);
+
+        int nEdge = 0;
+        final int MAX_EDGES = nVertex * (nVertex - 1) / 2; // maximum edge in undirected graph
+
+        double[][] vertexes = new double[nVertex][2];
+        double[][] edges = new double[nVertex][nVertex]; // edges[vertex1][vertex2] = weight if edge(vertex1 - vertex2) = weight
+
+//        create vertexes (the number of vertex = nVertex)
+        for (int v = 0; v < nVertex; v++) {
+            double x = rand.nextDouble() * maxVertex; // randomly generate x coordiate
+            double y = rand.nextDouble() * maxVertex; // randomly generate y coordiate
+            vertexes[v] = new double[]{x, y};
+        }
+
+//        create edges (maximum number of edge = MAX_EDGES)
+        edges[startVertex][goalVertex] = edgeWeight(vertexes[startVertex], vertexes[goalVertex]);
+        for (int e = 0; e < MAX_EDGES; e++) {
+            int v1, v2;
+//            make sure there are no edges link to start or goalVertex
+            do {
+                v1 = rand.nextInt(nVertex);
+            } while (v1 == goalVertex || v1 == startVertex);
+
+            do {
+                v2 = rand.nextInt(nVertex);
+            } while (v2 == goalVertex || v2 == startVertex || v2 == v1);
+
+            if (edges[v1][v2] == 0 && edges[v2][v1] == 0) {
+                edges[v1][v2] = edgeWeight(vertexes[v1], vertexes[v2]);
+                nEdge++;
+            }
+        }
+        //disconnect start and goal
+        edges[startVertex][goalVertex] = 0;
+        edges[goalVertex][startVertex] = 0;
+
+//        GENERATE INPUT
+//        1st line: nVertex nEdge
+        input.append(String.format("%d\t%d\n", nVertex, nEdge));
+
+//        vertex lines: vertex xcoordinate ycoordinate
+        for (int i = 0; i < nVertex; i++) {
+            input.append(String.format("%d\t%.2f\t%.2f\n", i + 1, vertexes[i][0], vertexes[i][1]));
+        }
+
+//        edge lines: vertex vertex weight
+        for (int i = 0; i < edges.length; i++) {
+            for (int j = 0; j < edges[i].length; j++) {
+                if (edges[i][j] != 0) {
+                    input.append(String.format("%d\t%d\t%.2f\n", i + 1, j + 1, edges[i][j]));
+                }
+            }
+        }
+
+//        last line: startVertex goalVertex
+        input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
+        return input.toString();
+    }
+
 
 
     public double edgeWeight(double[] v1, double[] v2) {

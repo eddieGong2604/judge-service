@@ -26,6 +26,7 @@ public class TestCase extends BaseEntity {
     @JoinColumn(name = "attempt_id")
     @JsonIgnore
     private Attempt attempt;
+    @Enumerated(EnumType.STRING)
     private TestCaseType type;
     private TestCaseSize size;
 }

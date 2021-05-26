@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum TestCaseType {
-    edgeCase(1), shortestPathOnly(3), bothShortestAndSecondShortestPath(2);
+    shortestPathOnly(3), bothShortestAndSecondShortestPath(2), noPath(4), inputError(1);
 
     private final int priority;
     TestCaseType(int priority) {
