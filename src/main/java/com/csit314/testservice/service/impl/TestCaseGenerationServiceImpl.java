@@ -32,7 +32,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     /*Executed after the bean is instantiated*/
     @Override
     public void init() throws InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        testCaseCache.delete(Objects.requireNonNull(testCaseCache.keys("*")));
         if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.noPath.toString()))) {
             addNoPathInputTestCaseToCache();
         }
