@@ -29,9 +29,6 @@ spec:
       containers:
       - image: judge0/judge0:latest
         imagePullPolicy: ""
-        envFrom:
-          - configMapRef:
-              name: server-config
         name: server
         ports:
         - containerPort: 2358
@@ -52,9 +49,6 @@ spec:
         - ./scripts/workers
         image: judge0/judge0:latest
         imagePullPolicy: ""
-        envFrom:
-          - configMapRef:
-              name: workers-config
         name: judge0-worker
         resources: { }
         securityContext:

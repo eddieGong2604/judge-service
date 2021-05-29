@@ -2,15 +2,6 @@ server:
   port: 9090
   tomcat:
     max-swallow-size: -1
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
