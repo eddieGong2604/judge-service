@@ -10,7 +10,7 @@ metadata:
     io.kompose.service: judge0-server
   name: judge0-server
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       io.kompose.service: judge0-server
