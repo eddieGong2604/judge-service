@@ -5,6 +5,6 @@ metadata:
   labels:
     io.kompose.service: workers
 data:
-  RAILS_MAX_THREADS: 30
-  COUNT: 100
-  MAX_QUEUE_SIZE: 2000
+  RAILS_MAX_THREADS: "30"
+  COUNT: "100"
+  MAX_QUEUE_SIZE: "2000"
