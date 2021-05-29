@@ -6,6 +6,6 @@ metadata:
     io.kompose.service: workers
 data:
   RAILS_MAX_THREADS: "10"
-  RAILS_SERVER_PROCESSES: "10"
+  RAILS_SERVER_PROCESSES: "5"
   MAX_QUEUE_SIZE: "1000"
-  COUNT: "10"
+  COUNT: "5"
