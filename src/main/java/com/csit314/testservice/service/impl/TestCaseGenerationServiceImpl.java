@@ -110,6 +110,11 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("inputErrorSmallGenerator"), TestCaseSize.Small, TestCaseType.inputError, 5));
+        for(CachedTestCase testCase : testCases){
+            if(testCase.getExpectedOutput().startsWith("Shortest")){
+                testCases.remove(testCase);
+            }
+        }
         operations.set(TestCaseType.inputError.toString(), testCases);
     }
 
