@@ -7,4 +7,4 @@ metadata:
 data:
   RAILS_MAX_THREADS: "20"
   COUNT: "20"
-  MAX_QUEUE_SIZE: "40"
+  MAX_QUEUE_SIZE: "10000"
