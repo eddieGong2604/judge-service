@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class TestCaseGenerationServiceImpl implements TestCaseGenerationService {
@@ -35,7 +32,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     /*Executed after the bean is instantiated*/
     @Override
     public void init() throws InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
+        testCaseCache.delete(Objects.requireNonNull(testCaseCache.keys("*")));
         if (!Objects.requireNonNull(testCaseCache.hasKey(TestCaseType.noPath.toString()))) {
             addNoPathInputTestCaseToCache();
         }
@@ -97,9 +94,10 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondLargeInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 5));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 5));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondSmallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 5));
-        for(CachedTestCase testCase : testCases){
-            if(testCase.getExpectedOutput().endsWith(".\n")){
-                testCases.remove(testCase);
+        for (Iterator<CachedTestCase> iterator = testCases.iterator(); iterator.hasNext(); ) {
+            CachedTestCase testCase = iterator.next();
+            if (testCase.getExpectedOutput().endsWith(".\n")) {
+                iterator.remove();
             }
         }
         operations.set(TestCaseType.bothShortestAndSecondShortestPath.toString(), testCases);
@@ -110,9 +108,10 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("inputErrorSmallGenerator"), TestCaseSize.Small, TestCaseType.inputError, 5));
-        for(CachedTestCase testCase : testCases){
-            if(testCase.getExpectedOutput().startsWith("Shortest")){
-                testCases.remove(testCase);
+        for (Iterator<CachedTestCase> iterator = testCases.iterator(); iterator.hasNext(); ) {
+            CachedTestCase testCase = iterator.next();
+            if (testCase.getExpectedOutput().startsWith("Shortest")) {
+                iterator.remove();
             }
         }
         operations.set(TestCaseType.inputError.toString(), testCases);
@@ -151,18 +150,23 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     public String shortestPathOnlySmallInputGenerator() {
         return shortestPathOnlyInputGenerator(10);
     }
-    public String inputErrorSmallGenerator(){
+
+    public String inputErrorSmallGenerator() {
         return inputErrorGenerator(10);
     }
-    public String noPathInputSmallGenerator(){
+
+    public String noPathInputSmallGenerator() {
         return noPathInputGenerator(10);
     }
-    public String noPathInputMediumGenerator(){
+
+    public String noPathInputMediumGenerator() {
         return noPathInputGenerator(50);
     }
-    public String noPathInputBigGenerator(){
+
+    public String noPathInputBigGenerator() {
         return noPathInputGenerator(200);
     }
+
     public String edgeCaseInputGenerator() {
         return "0 0\n0 0";
     }
@@ -263,7 +267,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
             }
             if (edges[v1][v2] == 0 && edges[v2][v1] == 0) {
                 edges[v1][v2] = edgeWeight(vertexes[v1], vertexes[v2]);
-                if(e == 1){
+                if (e == 1) {
                     edges[v1][v2] = -10;
                 }
                 nEdge++;
@@ -292,8 +296,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
         return input.toString();
     }
-
-
 
 
     public String inputLoopGenerator(int maxVertex) { // undirected graph may contain loop
@@ -424,7 +426,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
 
-
     public String noPathInputGenerator(int maxVertex) { // generate input with only shortest path, no second shortest path
 //       generate a disconnected graph where startVertex and goalVertex are isolated from the rest of graph. Hence there is only 1 path between startVertex and goalVertex- this is also the shortest path between them, no second shortest path
 
@@ -497,7 +498,6 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         input.append(String.format("%d\t%d\n", startVertex + 1, goalVertex + 1));
         return input.toString();
     }
-
 
 
     public double edgeWeight(double[] v1, double[] v2) {
