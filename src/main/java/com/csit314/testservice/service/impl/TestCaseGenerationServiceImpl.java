@@ -81,18 +81,18 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private void addShortestPathOnlyTestCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyLargeInputGenerator"), TestCaseSize.Large, TestCaseType.shortestPathOnly, 5));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.shortestPathOnly, 5));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlySmallInputGenerator"), TestCaseSize.Small, TestCaseType.shortestPathOnly, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyLargeInputGenerator"), TestCaseSize.Large, TestCaseType.shortestPathOnly, 2));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlyMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.shortestPathOnly, 3));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("shortestPathOnlySmallInputGenerator"), TestCaseSize.Small, TestCaseType.shortestPathOnly, 4));
         operations.set(TestCaseType.shortestPathOnly.toString(), testCases);
     }
 
     private void addBothShortestAndSecondShortestPathTestCaseToCache() throws InterruptedException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondLargeInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 5));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 5));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondSmallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondLargeInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 2));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 3));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondSmallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 4));
         for (Iterator<CachedTestCase> iterator = testCases.iterator(); iterator.hasNext(); ) {
             CachedTestCase testCase = iterator.next();
             if (testCase.getExpectedOutput().endsWith(".\n")) {
@@ -106,7 +106,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private void addInputErrorTestCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("inputErrorSmallGenerator"), TestCaseSize.Small, TestCaseType.inputError, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("inputErrorSmallGenerator"), TestCaseSize.Small, TestCaseType.inputError, 4));
         for (Iterator<CachedTestCase> iterator = testCases.iterator(); iterator.hasNext(); ) {
             CachedTestCase testCase = iterator.next();
             if (testCase.getExpectedOutput().startsWith("Shortest")) {
@@ -119,9 +119,9 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     private void addNoPathInputTestCaseToCache() throws NoSuchMethodException, InterruptedException, IllegalAccessException, InvocationTargetException {
         final ValueOperations<String, List<CachedTestCase>> operations = testCaseCache.opsForValue();
         List<CachedTestCase> testCases = new ArrayList<>();
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputBigGenerator"), TestCaseSize.Large, TestCaseType.noPath, 5));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputMediumGenerator"), TestCaseSize.Medium, TestCaseType.noPath, 5));
-        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputSmallGenerator"), TestCaseSize.Small, TestCaseType.noPath, 5));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputBigGenerator"), TestCaseSize.Large, TestCaseType.noPath, 4));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputMediumGenerator"), TestCaseSize.Medium, TestCaseType.noPath, 3));
+        testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputSmallGenerator"), TestCaseSize.Small, TestCaseType.noPath, 2));
         operations.set(TestCaseType.noPath.toString(), testCases);
     }
 
