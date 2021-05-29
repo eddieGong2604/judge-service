@@ -97,7 +97,11 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondLargeInputGenerator"), TestCaseSize.Large, TestCaseType.bothShortestAndSecondShortestPath, 5));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondMediumInputGenerator"), TestCaseSize.Medium, TestCaseType.bothShortestAndSecondShortestPath, 5));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("bothShortestAndSecondSmallInputGenerator"), TestCaseSize.Small, TestCaseType.bothShortestAndSecondShortestPath, 5));
-        testCases.removeIf(testCase -> testCase.getExpectedOutput().endsWith("."));
+        for(CachedTestCase testCase : testCases){
+            if(testCase.getExpectedOutput().endsWith(".\n")){
+                testCases.remove(testCase);
+            }
+        }
         operations.set(TestCaseType.bothShortestAndSecondShortestPath.toString(), testCases);
     }
 
