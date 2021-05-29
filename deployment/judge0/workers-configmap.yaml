@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: workers-config
+  labels:
+    io.kompose.service: workers
+data:
+  RAILS_MAX_THREADS: 30
+  COUNT: 100
+  MAX_QUEUE_SIZE: 2000
