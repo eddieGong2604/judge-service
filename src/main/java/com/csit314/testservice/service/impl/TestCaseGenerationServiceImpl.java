@@ -162,15 +162,15 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     public String noPathInputSmallGenerator() {
-        return noPathInputGenerator(10);
+        return noPathInputGenerator(10,3);
     }
 
     public String noPathInputMediumGenerator() {
-        return noPathInputGenerator(50);
+        return noPathInputGenerator(100,50);
     }
 
     public String noPathInputBigGenerator() {
-        return noPathInputGenerator(100);
+        return noPathInputGenerator(200,150);
     }
 
     public String edgeCaseInputGenerator() {
@@ -432,14 +432,14 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
 
-    public String noPathInputGenerator(int maxVertex) { // generate input with only shortest path, no second shortest path
+    public String noPathInputGenerator(int maxVertex, int minVertex) { // generate input with only shortest path, no second shortest path
 //       generate a disconnected graph where startVertex and goalVertex are isolated from the rest of graph. Hence there is only 1 path between startVertex and goalVertex- this is also the shortest path between them, no second shortest path
 
 //        maxVertex = maximum number of vertex this graph can have
 //        init variable
         StringBuilder input = new StringBuilder();
         Random rand = new Random();
-        int nVertex = rand.nextInt(maxVertex) + 4; // number of vertex, min = 4
+        int nVertex = rand.nextInt(maxVertex-minVertex) + minVertex; // number of vertex, min = 4
         int startVertex = rand.nextInt(nVertex);
 //        ensure goalVertex differs from startVertex
         int goalVertex;
