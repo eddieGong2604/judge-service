@@ -5,9 +5,9 @@ metadata:
   labels:
     io.kompose.service: server-config
 data:
-  RAILS_MAX_THREADS: "8"
-  RAILS_SERVER_PROCESSES: "4"
+  RAILS_MAX_THREADS: "2"
+  RAILS_SERVER_PROCESSES: "3"
   MAX_QUEUE_SIZE: "1000"
-  COUNT: "4"
+  COUNT: "3"
 
 
