@@ -122,32 +122,39 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputBigGenerator"), TestCaseSize.Large, TestCaseType.noPath, 4));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputMediumGenerator"), TestCaseSize.Medium, TestCaseType.noPath, 3));
         testCases.addAll(generateTestCase(TestCaseGenerationServiceImpl.class.getMethod("noPathInputSmallGenerator"), TestCaseSize.Small, TestCaseType.noPath, 2));
+        // Add edge case
+        CachedTestCase edgeCase = new CachedTestCase();
+        edgeCase.setInput("0 0\n0 0");
+        edgeCase.setSize(TestCaseSize.Small);
+        edgeCase.setType(TestCaseType.noPath);
+        edgeCase.setExpectedOutput("There is no path from 0 to 0.\n");
+        testCases.add(edgeCase);
         operations.set(TestCaseType.noPath.toString(), testCases);
     }
 
     public String bothShortestAndSecondMediumInputGenerator() {
-        return bothShortestAndSecondShortestInputGenerator(50);
+        return bothShortestAndSecondShortestInputGenerator(600,500);
     }
 
     public String bothShortestAndSecondLargeInputGenerator() {
-        return bothShortestAndSecondShortestInputGenerator(200);
+        return bothShortestAndSecondShortestInputGenerator(1500,1000);
     }
 
     public String bothShortestAndSecondSmallInputGenerator() {
-        return bothShortestAndSecondShortestInputGenerator(10);
+        return bothShortestAndSecondShortestInputGenerator(10,3);
 
     }
 
     public String shortestPathOnlyMediumInputGenerator() {
-        return shortestPathOnlyInputGenerator(50);
+        return shortestPathOnlyInputGenerator(600,500);
     }
 
     public String shortestPathOnlyLargeInputGenerator() {
-        return shortestPathOnlyInputGenerator(200);
+        return shortestPathOnlyInputGenerator(1500,1000);
     }
 
     public String shortestPathOnlySmallInputGenerator() {
-        return shortestPathOnlyInputGenerator(10);
+        return shortestPathOnlyInputGenerator(10,3);
     }
 
     public String inputErrorSmallGenerator() {
@@ -170,12 +177,12 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         return "0 0\n0 0";
     }
 
-    public String bothShortestAndSecondShortestInputGenerator(int maxVertex) { // undirected graph with no loop, startVertex differs from goalVertex
+    public String bothShortestAndSecondShortestInputGenerator(int maxVertex, int minVertex) { // undirected graph with no loop, startVertex differs from goalVertex
 //        maxVertex = maximum number of vertex this graph can have
 //        init variable
         StringBuilder input = new StringBuilder();
         Random rand = new Random();
-        int nVertex = rand.nextInt(maxVertex) + 1; // number of vertex
+        int nVertex = rand.nextInt(maxVertex- minVertex) + minVertex; // number of vertex
         int startVertex = rand.nextInt(nVertex);
 //        ensure goalVertex differs from startVertex
         int goalVertex = rand.nextInt(nVertex);
@@ -297,12 +304,12 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
 
-    public String inputLoopGenerator(int maxVertex) { // undirected graph may contain loop
+    public String inputLoopGenerator(int maxVertex, int minVertex) { // undirected graph may contain loop
 //        maxVertex = maximum number of vertex this graph can have
 //        INIT VARIABLE
         StringBuilder input = new StringBuilder();
         Random rand = new Random();
-        int nVertex = rand.nextInt(maxVertex) + 1; // number of vertex
+        int nVertex = rand.nextInt(maxVertex - minVertex) + minVertex; // number of vertex
         int startVertex = rand.nextInt(nVertex);
 //        ensure goalVertex differs from startVertex
         int goalVertex = rand.nextInt(nVertex);
@@ -354,14 +361,14 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
         return input.toString();
     }
 
-    public String shortestPathOnlyInputGenerator(int maxVertex) { // generate input with only shortest path, no second shortest path
+    public String shortestPathOnlyInputGenerator(int maxVertex, int minVertex) { // generate input with only shortest path, no second shortest path
 //       generate a disconnected graph where startVertex and goalVertex are isolated from the rest of graph. Hence there is only 1 path between startVertex and goalVertex- this is also the shortest path between them, no second shortest path
 
 //        maxVertex = maximum number of vertex this graph can have
 //        init variable
         StringBuilder input = new StringBuilder();
         Random rand = new Random();
-        int nVertex = rand.nextInt(maxVertex) + 4; // number of vertex, min = 4
+        int nVertex = rand.nextInt(maxVertex- minVertex) + minVertex; // number of vertex, min = 4
         int startVertex = rand.nextInt(nVertex);
 //        ensure goalVertex differs from startVertex
         int goalVertex;

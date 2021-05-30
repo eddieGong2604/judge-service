@@ -29,6 +29,7 @@ spec:
       containers:
       - image: judge0/judge0:latest
         imagePullPolicy: ""
+
         envFrom:
           - configMapRef:
               name: server-config
