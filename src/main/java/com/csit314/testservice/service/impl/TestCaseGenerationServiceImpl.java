@@ -133,11 +133,11 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     public String bothShortestAndSecondMediumInputGenerator() {
-        return bothShortestAndSecondShortestInputGenerator(600,500);
+        return bothShortestAndSecondShortestInputGenerator(100,50);
     }
 
     public String bothShortestAndSecondLargeInputGenerator() {
-        return bothShortestAndSecondShortestInputGenerator(1500,1000);
+        return bothShortestAndSecondShortestInputGenerator(200,150);
     }
 
     public String bothShortestAndSecondSmallInputGenerator() {
@@ -146,11 +146,11 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     public String shortestPathOnlyMediumInputGenerator() {
-        return shortestPathOnlyInputGenerator(600,500);
+        return shortestPathOnlyInputGenerator(100,50);
     }
 
     public String shortestPathOnlyLargeInputGenerator() {
-        return shortestPathOnlyInputGenerator(1500,1000);
+        return shortestPathOnlyInputGenerator(200,150);
     }
 
     public String shortestPathOnlySmallInputGenerator() {
@@ -170,7 +170,7 @@ public class TestCaseGenerationServiceImpl implements TestCaseGenerationService 
     }
 
     public String noPathInputBigGenerator() {
-        return noPathInputGenerator(200);
+        return noPathInputGenerator(100);
     }
 
     public String edgeCaseInputGenerator() {
